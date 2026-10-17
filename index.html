@@ -667,18 +667,22 @@ app.listen(PORT, () => {
         });
 
         // --- Fetch Postcards from Express/Mongo REST API ---
-        const fetchPostcards = async () => {
-          loading.value = true;
-          try {
-            const res = await fetch('/api/postcards');
-            if (res.ok) {
-              const data = await res.json();
-              postcards.value = data;
-              apiConnected.value = true;
-            } else {
-              throw new Error('API return non-200 status');
-            }
-          } catch (err) {
+      const API_BASE_URL = 'http://9.160.35.78:3000';
+
+// 1. 從後端 API 取得所有明信片
+async function fetchPostcards() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/postcards`);
+        if (response.ok) {
+            postcards = await response.json();
+            renderPostcards();
+        } else {
+            console.error('無法取得資料，伺服器回應狀態：', response.status);
+        }
+    } catch (err) {
+        console.error('無法連線至後端伺服器:', err);
+    }
+} catch (err) {
             // Fallback to local browser storage if standalone front-end
             apiConnected.value = false;
             const local = localStorage.getItem('pb_postcards');
@@ -695,7 +699,42 @@ app.listen(PORT, () => {
             loading.value = false;
           }
         };
+      async function handleUpload(event) {
+    event.preventDefault();
+    
+    const title = document.getElementById('postTitle').value;
+    const sourceType = document.getElementById('postSourceType').value;
+    const address = document.getElementById('postAddress').value;
+    const date = document.getElementById('postDate').value;
+    const image = previewBase64 || document.getElementById('postImageUrl').value;
 
+    if (!image) {
+        alert('Please select an image file or provide an image URL.');
+        return;
+    }
+
+    const newPostcard = { title, sourceType, address, date, image };
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/postcards`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newPostcard)
+        });
+
+        if (response.ok) {
+            const saved = await response.json();
+            postcards.unshift(saved);
+            renderPostcards();
+            closeUploadModal();
+        } else {
+            alert('Failed to save postcard to database.');
+        }
+    } catch (err) {
+        console.error('伺服器連線失敗:', err);
+        alert('Error connecting to server.');
+    }
+}
         // --- Form Handlers & Image Preview ---
         const openUploadModal = () => {
           form.value = {
