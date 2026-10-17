@@ -1,782 +1,827 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pikmin Bloom Postcard Gallery</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f7ff',
-                            100: '#e0effe',
-                            200: '#bae0fd',
-                            300: '#7cc5fb',
-                            400: '#36a9f7',
-                            500: '#0c8de9',
-                            600: '#0270ca',
-                            700: '#0359a4',
-                            800: '#074c87',
-                            900: '#0c4070',
-                            950: '#082849'
-                        },
-                        slate: {
-                            750: '#2d3748',
-                        }
-                    }
-                }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pikmin Bloom Postcard Gallery</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind Configuration for Custom Palette -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f4f8',
+              100: '#d9e2ec',
+              200: '#bccadc',
+              300: '#9fb3c8',
+              400: '#829ab1',
+              500: '#627d98',
+              600: '#486581',
+              700: '#334e68',
+              800: '#243b53',
+              900: '#102a43',
             }
+          }
         }
-    </script>
-    <!-- Font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Custom scrollbar for gallery */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-    </style>
+      }
+    }
+  </script>
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    [v-cloak] { display: none; }
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.03);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(100,116,139,0.3);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(100,116,139,0.5);
+    }
+  </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-brand-100 selection:text-brand-900">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
+  <div id="app" v-cloak class="flex-1 flex flex-col">
 
-    <!-- Header Navigation -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- App Title and Brand -->
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center shadow-md shadow-brand-500/20">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold text-slate-900 leading-tight" data-i18n="appTitle">Pikmin Bloom Gallery</h1>
-                        <p class="text-xs text-slate-500" data-i18n="appSubtitle">Postcard Collection & Memories</p>
-                    </div>
-                </div>
-
-                <!-- Actions / Language Selector -->
-                <div class="flex items-center space-x-3">
-                    <button id="openUploadBtn" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 shadow-sm">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        <span data-i18n="addPostcard">Add Postcard</span>
-                    </button>
-
-                    <!-- Language Switcher Button -->
-                    <button id="langToggleBtn" class="inline-flex items-center px-3 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
-                        <svg class="w-4 h-4 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
-                        </svg>
-                        <span id="langText" class="font-medium">繁體中文</span>
-                    </button>
-                </div>
-            </div>
+    <!-- Header / Navbar -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Brand Title -->
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-lg bg-brand-700 text-white flex items-center justify-center font-bold shadow-sm">
+            <svg class="w-5 h-5 text-slate-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-lg font-bold text-slate-900 tracking-tight leading-none">{{ t('appTitle') }}</h1>
+            <span class="text-xs text-slate-500 font-medium">{{ t('appSubtitle') }}</span>
+          </div>
         </div>
+
+        <!-- Right Controls -->
+        <div class="flex items-center space-x-3">
+          <!-- Backend Dev Server Code Modal Toggle -->
+          <button 
+            @click="showDevModal = true" 
+            class="hidden sm:flex items-center space-x-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition-colors border border-slate-200"
+            :title="t('serverCodeBtn')"
+          >
+            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+            <span>{{ t('serverCodeBtn') }}</span>
+          </button>
+
+          <!-- Language Toggle -->
+          <button 
+            @click="toggleLang" 
+            class="flex items-center space-x-1 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-lg transition-colors border border-brand-200"
+          >
+            <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+            </svg>
+            <span>{{ currentLang === 'en' ? '繁體中文' : 'English' }}</span>
+          </button>
+
+          <!-- Add Postcard Primary Action -->
+          <button 
+            @click="openUploadModal" 
+            class="flex items-center space-x-1.5 bg-brand-700 hover:bg-brand-800 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg shadow-sm hover:shadow transition-all"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>{{ t('addPostcardBtn') }}</span>
+          </button>
+        </div>
+      </div>
     </header>
 
-    <!-- Main Content Layout -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+      
+      <!-- Toolbar & Status Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-semibold text-slate-700">{{ t('totalCount') }}:</span>
+          <span class="bg-slate-200 text-slate-700 text-xs font-bold px-2.5 py-0.5 rounded-full">{{ postcards.length }}</span>
+          
+          <!-- Live API Indicator status -->
+          <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full border ml-2" :class="apiConnected ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'">
+            <span class="w-1.5 h-1.5 rounded-full" :class="apiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'"></span>
+            {{ apiConnected ? t('apiLive') : t('apiLocalOnly') }}
+          </span>
+        </div>
 
-        <!-- Controls Bar (Search & Filters) -->
-        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex flex-col md:flex-row gap-4 justify-between items-center">
+        <!-- Filter Controls -->
+        <div class="flex items-center space-x-2">
+          <label class="text-xs font-medium text-slate-500">{{ t('filterLabel') }}:</label>
+          <select v-model="filterType" class="text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:ring-2 focus:ring-brand-500 focus:outline-none">
+            <option value="ALL">{{ t('filterAll') }}</option>
+            <option value="Flower">{{ t('typeFlower') }}</option>
+            <option value="Mushroom Fight">{{ t('typeMushroom') }}</option>
+          </select>
+
+          <!-- Refresh Button -->
+          <button @click="fetchPostcards" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors" :title="t('refreshTooltip')">
+            <svg class="w-4 h-4" :class="{'animate-spin': loading}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Zero Data / Empty State -->
+      <div v-if="filteredPostcards.length === 0 && !loading" class="flex-1 flex flex-col items-center justify-center py-16 px-4 text-center">
+        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4 text-slate-400 border border-slate-200">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+          </svg>
+        </div>
+        <h3 class="text-base font-semibold text-slate-800 mb-1">{{ t('emptyStateTitle') }}</h3>
+        <p class="text-xs text-slate-500 max-w-sm mb-6">{{ t('emptyStateDesc') }}</p>
+        <button 
+          @click="openUploadModal" 
+          class="bg-brand-700 hover:bg-brand-800 text-white text-xs font-medium px-4 py-2.5 rounded-lg shadow-sm transition-all"
+        >
+          {{ t('addPostcardBtn') }}
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="flex-1 flex items-center justify-center py-16">
+        <div class="flex flex-col items-center space-y-3">
+          <svg class="w-8 h-8 text-brand-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-xs font-medium text-slate-500">{{ t('loading') }}</span>
+        </div>
+      </div>
+
+      <!-- Postcard Cards Grid -->
+      <div v-if="filteredPostcards.length > 0 && !loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div 
+          v-for="item in filteredPostcards" 
+          :key="item._id || item.id"
+          @click="openDetailsModal(item)"
+          class="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col cursor-pointer"
+        >
+          <!-- Image Container -->
+          <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden border-b border-slate-100">
+            <img 
+              :src="item.image" 
+              :alt="item.title" 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              @error="handleImageError"
+            />
             
-            <!-- Search Bar -->
-            <div class="relative w-full md:w-80">
-                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
-                <input type="text" id="searchInput" class="block w-full pl-9 pr-3 py-2 border border-slate-300 rounded-lg text-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" data-i18n-placeholder="searchPlaceholder" placeholder="Search title or location...">
-            </div>
+            <!-- Type Badge Overlay -->
+            <span 
+              class="absolute top-2.5 right-2.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm border backdrop-blur-md"
+              :class="item.sourceType === 'Flower' ? 'bg-sky-50/90 text-sky-800 border-sky-200' : 'bg-slate-800/80 text-slate-100 border-slate-700'"
+            >
+              {{ item.sourceType === 'Flower' ? t('typeFlower') : t('typeMushroom') }}
+            </span>
+          </div>
 
-            <!-- Filters -->
-            <div class="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
-                <!-- Source Filter -->
-                <div class="flex items-center space-x-2">
-                    <label for="filterSource" class="text-xs font-medium text-slate-500" data-i18n="filterSourceLabel">Source:</label>
-                    <select id="filterSource" class="block py-2 px-3 border border-slate-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
-                        <option value="ALL" data-i18n="allSources">All Sources</option>
-                        <option value="Flower" data-i18n="sourceFlower">Big Flower</option>
-                        <option value="Mushroom Fight" data-i18n="sourceMushroom">Mushroom Battle</option>
-                    </select>
-                </div>
-
-                <!-- Sort Filter -->
-                <div class="flex items-center space-x-2">
-                    <label for="sortOrder" class="text-xs font-medium text-slate-500" data-i18n="sortLabel">Sort By:</label>
-                    <select id="sortOrder" class="block py-2 px-3 border border-slate-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
-                        <option value="newest" data-i18n="sortNewest">Date: Newest First</option>
-                        <option value="oldest" data-i18n="sortOldest">Date: Oldest First</option>
-                        <option value="title" data-i18n="sortTitle">Title (A-Z)</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Postcard Count Indicator -->
-        <div class="flex items-center justify-between px-1">
-            <span class="text-sm font-medium text-slate-500" id="postcardCountText">0 postcards found</span>
-        </div>
-
-        <!-- Postcards Grid Gallery -->
-        <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Dynamically populated or state empty -->
-        </div>
-
-        <!-- Zero State Container -->
-        <div id="emptyState" class="hidden flex-1 flex flex-col items-center justify-center py-16 px-4 bg-white rounded-2xl border-2 border-dashed border-slate-200 text-center">
-            <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-400 mb-4">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          <!-- Postcard Info -->
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm mb-1 truncate group-hover:text-brand-700 transition-colors">
+                {{ item.title }}
+              </h3>
+              <p class="text-xs text-slate-500 flex items-center mb-3 truncate">
+                <svg class="w-3.5 h-3.5 mr-1 shrink-0 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                 </svg>
+                <span class="truncate">{{ item.address }}</span>
+              </p>
             </div>
-            <h3 class="text-lg font-semibold text-slate-800 mb-1" data-i18n="emptyTitle">No Postcards Collected Yet</h3>
-            <p class="text-sm text-slate-500 max-w-sm mb-6" data-i18n="emptyDescription">Your gallery is completely empty. Start documenting your Pikmin Bloom adventures by uploading your first postcard.</p>
-            <button id="emptyUploadBtn" class="inline-flex items-center px-4 py-2.5 border border-transparent rounded-lg text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 transition shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                <span data-i18n="addFirstPostcard">Upload First Postcard</span>
-            </button>
-        </div>
 
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+              <span class="flex items-center">
+                <svg class="w-3 h-3 mr-1 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                {{ item.date }}
+              </span>
+              <span class="text-brand-600 font-medium hover:underline">{{ t('viewDetails') }} &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
-    <!-- Upload / Add Postcard Modal -->
-    <div id="uploadModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            
-            <!-- Backdrop -->
-            <div id="modalBackdrop" class="fixed inset-0 bg-slate-900/40 transition-opacity backdrop-blur-sm"></div>
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+        {{ t('footerText') }} &bull; Target DB: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-600">postcard</code> &bull; Collection: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-600">bread</code>
+      </div>
+    </footer>
 
-            <!-- Modal Panel Centering Trick -->
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <!-- Modal Body -->
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-100">
-                <div class="bg-slate-50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                    <h3 class="text-base font-semibold text-slate-900" id="modal-title" data-i18n="modalUploadTitle">
-                        New Postcard Entry
-                    </h3>
-                    <button id="closeUploadModalBtn" class="text-slate-400 hover:text-slate-500 p-1 rounded-lg focus:outline-none">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-
-                <form id="postcardForm" class="p-6 space-y-4">
-                    <!-- Title -->
-                    <div>
-                        <label for="postTitle" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" data-i18n="labelTitle">Title *</label>
-                        <input type="text" id="postTitle" required class="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" placeholder="e.g., Shibuya Station Monument">
-                    </div>
-
-                    <!-- Location -->
-                    <div>
-                        <label for="postLocation" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" data-i18n="labelLocation">Exact Location Address *</label>
-                        <input type="text" id="postLocation" required class="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" placeholder="e.g., Shibuya, Tokyo, Japan">
-                    </div>
-
-                    <!-- Grid Row: Date and Source -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <!-- Date Collected -->
-                        <div>
-                            <label for="postDate" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" data-i18n="labelDate">Date Collected *</label>
-                            <input type="date" id="postDate" required class="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
-                        </div>
-
-                        <!-- Source Type -->
-                        <div>
-                            <label for="postSource" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" data-i18n="labelSource">Source Type *</label>
-                            <select id="postSource" required class="block w-full px-3 py-2 border border-slate-300 bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
-                                <option value="Flower" data-i18n="sourceFlower">Big Flower</option>
-                                <option value="Mushroom Fight" data-i18n="sourceMushroom">Mushroom Battle</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Image Input Toggle (File vs URL) -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1" data-i18n="labelImage">Postcard Image *</label>
-                        
-                        <div class="flex items-center space-x-4 mb-2">
-                            <label class="inline-flex items-center text-xs text-slate-600 cursor-pointer">
-                                <input type="radio" name="imageSourceType" value="file" checked class="text-brand-600 focus:ring-brand-500">
-                                <span class="ml-1.5" data-i18n="imgTypeFile">File Upload</span>
-                            </label>
-                            <label class="inline-flex items-center text-xs text-slate-600 cursor-pointer">
-                                <input type="radio" name="imageSourceType" value="url" class="text-brand-600 focus:ring-brand-500">
-                                <span class="ml-1.5" data-i18n="imgTypeUrl">Image URL</span>
-                            </label>
-                        </div>
-
-                        <!-- Local File Picker Container -->
-                        <div id="filePickerContainer" class="border-2 border-dashed border-slate-300 rounded-lg p-4 text-center hover:border-brand-400 transition cursor-pointer bg-slate-50">
-                            <input type="file" id="postFile" accept="image/png, image/jpeg" class="hidden">
-                            <label for="postFile" class="cursor-pointer flex flex-col items-center justify-center">
-                                <svg class="w-8 h-8 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                <span id="fileNameDisplay" class="text-xs text-slate-600 font-medium" data-i18n="fileChoosePrompt">Click to select PNG or JPEG</span>
-                                <span class="text-[10px] text-slate-400 mt-0.5">MAX. 5MB</span>
-                            </label>
-                        </div>
-
-                        <!-- URL Input Container -->
-                        <div id="urlInputContainer" class="hidden">
-                            <input type="url" id="postUrl" class="block w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500" placeholder="https://example.com/postcard.jpg">
-                        </div>
-                    </div>
-
-                    <!-- Submission Error / Message -->
-                    <div id="formErrorMessage" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200"></div>
-
-                    <!-- Modal Actions -->
-                    <div class="pt-3 flex items-center justify-end space-x-3 border-t border-slate-100">
-                        <button type="button" id="cancelUploadBtn" class="px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500" data-i18n="btnCancel">Cancel</button>
-                        <button type="submit" class="px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-brand-600 hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500 shadow-sm" data-i18n="btnSave">Save Postcard</button>
-                    </div>
-                </form>
-            </div>
+    <!-- MODAL 1: ADD POSTCARD MODAL -->
+    <div v-if="showUploadModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
+        
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <h3 class="text-base font-bold text-slate-900">{{ t('addPostcardBtn') }}</h3>
+          <button @click="closeUploadModal" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
+
+        <!-- Form Form Content -->
+        <form @submit.prevent="submitPostcard" class="p-6 space-y-4">
+          
+          <!-- Image Input Section with Realtime Live Preview -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ t('formImageLabel') }} *</label>
+            
+            <!-- Upload Mode Switcher -->
+            <div class="flex space-x-2 mb-2">
+              <button 
+                type="button" 
+                @click="imageInputType = 'file'" 
+                class="text-xs px-2.5 py-1 rounded-md font-medium border transition-colors"
+                :class="imageInputType === 'file' ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'"
+              >
+                {{ t('uploadLocalFile') }}
+              </button>
+              <button 
+                type="button" 
+                @click="imageInputType = 'url'" 
+                class="text-xs px-2.5 py-1 rounded-md font-medium border transition-colors"
+                :class="imageInputType === 'url' ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'"
+              >
+                {{ t('uploadImageUrl') }}
+              </button>
+            </div>
+
+            <!-- File Upload Box -->
+            <div v-if="imageInputType === 'file'">
+              <input 
+                type="file" 
+                ref="fileInput"
+                accept="image/png, image/jpeg, image/jpg, image/webp" 
+                @change="handleFileChange"
+                class="hidden" 
+                id="file-upload"
+              />
+              <label 
+                for="file-upload" 
+                class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100/50 transition-colors text-center"
+              >
+                <svg class="w-8 h-8 text-slate-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <span class="text-xs font-medium text-slate-600">{{ t('clickToChooseFile') }}</span>
+                <span class="text-[10px] text-slate-400 mt-0.5">PNG, JPG, WEBP (Auto converted to Base64)</span>
+              </label>
+            </div>
+
+            <!-- URL Input Field -->
+            <div v-else>
+              <input 
+                type="url" 
+                v-model="form.imageUrlInput" 
+                @input="handleUrlInput" 
+                :placeholder="t('urlPlaceholder')" 
+                class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+              />
+            </div>
+
+            <!-- Real-Time Image Preview Box -->
+            <div class="mt-3">
+              <span class="block text-[11px] font-semibold text-slate-500 mb-1">{{ t('livePreviewLabel') }}:</span>
+              <div class="relative w-full h-44 bg-slate-100 border border-slate-200 rounded-lg overflow-hidden flex items-center justify-center">
+                <img 
+                  v-if="form.image" 
+                  :src="form.image" 
+                  class="w-full h-full object-cover" 
+                  alt="Live Preview" 
+                  @error="onPreviewError"
+                />
+                <div v-else class="text-center p-4">
+                  <svg class="w-6 h-6 text-slate-300 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                  <span class="text-xs text-slate-400 block">{{ t('noPreviewAvailable') }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Title Field -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formTitleLabel') }} *</label>
+            <input 
+              type="text" 
+              v-model="form.title" 
+              required 
+              :placeholder="t('titlePlaceholder')" 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+            />
+          </div>
+
+          <!-- Source Type Dropdown -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formTypeLabel') }} *</label>
+            <select 
+              v-model="form.sourceType" 
+              required 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+            >
+              <option value="Flower">{{ t('typeFlower') }}</option>
+              <option value="Mushroom Fight">{{ t('typeMushroom') }}</option>
+            </select>
+          </div>
+
+          <!-- Address Field -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formAddressLabel') }} *</label>
+            <input 
+              type="text" 
+              v-model="form.address" 
+              required 
+              :placeholder="t('addressPlaceholder')" 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+            />
+          </div>
+
+          <!-- Date Field -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formDateLabel') }} *</label>
+            <input 
+              type="date" 
+              v-model="form.date" 
+              required 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:ring-2 focus:ring-brand-500 focus:outline-none"
+            />
+          </div>
+
+          <!-- Submit Buttons -->
+          <div class="pt-3 flex items-center justify-end space-x-2 border-t border-slate-200">
+            <button 
+              type="button" 
+              @click="closeUploadModal" 
+              class="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800 rounded-lg"
+            >
+              {{ t('cancelBtn') }}
+            </button>
+            <button 
+              type="submit" 
+              :disabled="submitting || !form.image"
+              class="px-4 py-2 bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white text-xs font-medium rounded-lg shadow-sm transition-all flex items-center space-x-1.5"
+            >
+              <svg v-if="submitting" class="w-3.5 h-3.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>{{ t('submitBtn') }}</span>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <!-- Inspector Modal (Detail View) -->
-    <div id="inspectModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="inspect-title" role="dialog" aria-modal="true">
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <!-- Backdrop -->
-            <div id="inspectBackdrop" class="fixed inset-0 bg-slate-900/60 transition-opacity backdrop-blur-md"></div>
-
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <!-- Modal Panel -->
-            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full border border-slate-100">
-                
-                <!-- Card Header -->
-                <div class="px-6 py-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <span id="inspectSourceBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-100 text-brand-800">
-                            Source
-                        </span>
-                        <span id="inspectDate" class="text-xs text-slate-500 font-medium">Date</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button id="deletePostcardBtn" class="text-slate-400 hover:text-red-600 p-1.5 rounded-lg transition hover:bg-red-50 focus:outline-none" title="Delete Postcard">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                        </button>
-                        <button id="closeInspectBtn" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg focus:outline-none">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Card Content -->
-                <div class="p-6 flex flex-col md:flex-row gap-6">
-                    <!-- Image Preview -->
-                    <div class="w-full md:w-1/2 flex items-center justify-center bg-slate-100 rounded-xl overflow-hidden border border-slate-200 aspect-square">
-                        <img id="inspectImage" src="" alt="Postcard preview" class="w-full h-full object-cover">
-                    </div>
-
-                    <!-- Metadata Details -->
-                    <div class="w-full md:w-1/2 flex flex-col justify-between space-y-4">
-                        <div>
-                            <h2 id="inspectTitle" class="text-xl font-bold text-slate-900 leading-snug mb-2">Postcard Title</h2>
-                            
-                            <div class="space-y-3 mt-4 text-sm">
-                                <div>
-                                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-0.5" data-i18n="inspectLocation">Location</span>
-                                    <p id="inspectLocation" class="text-slate-700 font-medium leading-relaxed flex items-start">
-                                        <svg class="w-4 h-4 text-slate-400 mr-1.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        </svg>
-                                        <span id="inspectLocationText">Address details</span>
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-0.5" data-i18n="inspectSource">Source Type</span>
-                                    <p id="inspectSourceText" class="text-slate-700 font-medium">Big Flower</p>
-                                </div>
-
-                                <div>
-                                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-0.5" data-i18n="inspectDateLabel">Collection Date</span>
-                                    <p id="inspectDateText" class="text-slate-700 font-medium">YYYY-MM-DD</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="pt-4 border-t border-slate-100 flex justify-end">
-                            <button id="closeInspectBottomBtn" class="w-full sm:w-auto px-4 py-2 border border-slate-300 rounded-lg text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 transition" data-i18n="btnClose">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- MODAL 2: CARD DETAILS VIEW (NO DELETE BUTTON INCLUDED AS SPECIFIED) -->
+    <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
+        <!-- Image Preview Header -->
+        <div class="relative bg-slate-900 aspect-[4/3] w-full">
+          <img :src="selectedPostcard.image" :alt="selectedPostcard.title" class="w-full h-full object-contain" />
+          <button 
+            @click="selectedPostcard = null" 
+            class="absolute top-3 right-3 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full backdrop-blur-md transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
         </div>
+
+        <!-- Details -->
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-2">
+            <span 
+              class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border"
+              :class="selectedPostcard.sourceType === 'Flower' ? 'bg-sky-50 text-sky-800 border-sky-200' : 'bg-slate-100 text-slate-800 border-slate-300'"
+            >
+              {{ selectedPostcard.sourceType === 'Flower' ? t('typeFlower') : t('typeMushroom') }}
+            </span>
+            <span class="text-xs text-slate-400">{{ selectedPostcard.date }}</span>
+          </div>
+
+          <h2 class="text-xl font-bold text-slate-900 mb-2">{{ selectedPostcard.title }}</h2>
+          
+          <div class="flex items-start text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4">
+            <svg class="w-4 h-4 mr-1.5 mt-0.5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span>{{ selectedPostcard.address }}</span>
+          </div>
+
+          <!-- Note: NO DELETE BUTTON IS RENDERED OR PRESENT -->
+          <div class="flex justify-end">
+            <button 
+              @click="selectedPostcard = null" 
+              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors"
+            >
+              {{ t('closeBtn') }}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Application Script Logic -->
-    <script>
-        // Internationalization (i18n) Dictionaries
-        const i18nData = {
-            en: {
-                appTitle: "Pikmin Bloom Gallery",
-                appSubtitle: "Postcard Collection & Memories",
-                addPostcard: "Add Postcard",
-                searchPlaceholder: "Search title or location...",
-                filterSourceLabel: "Source:",
-                allSources: "All Sources",
-                sourceFlower: "Big Flower",
-                sourceMushroom: "Mushroom Battle",
-                sortLabel: "Sort By:",
-                sortNewest: "Date: Newest First",
-                sortOldest: "Date: Oldest First",
-                sortTitle: "Title (A-Z)",
-                emptyTitle: "No Postcards Collected Yet",
-                emptyDescription: "Your gallery is completely empty. Start documenting your Pikmin Bloom adventures by uploading your first postcard.",
-                addFirstPostcard: "Upload First Postcard",
-                modalUploadTitle: "New Postcard Entry",
-                labelTitle: "Title *",
-                labelLocation: "Exact Location Address *",
-                labelDate: "Date Collected *",
-                labelSource: "Source Type *",
-                labelImage: "Postcard Image *",
-                imgTypeFile: "File Upload",
-                imgTypeUrl: "Image URL",
-                fileChoosePrompt: "Click to select PNG or JPEG",
-                btnCancel: "Cancel",
-                btnSave: "Save Postcard",
-                inspectLocation: "Location Address",
-                inspectSource: "Source Type",
-                inspectDateLabel: "Collection Date",
-                btnClose: "Close",
-                countText: "postcards found",
-                langToggle: "繁體中文",
-                errorFillFields: "Please fill in all required fields and select an image.",
-                confirmDelete: "Are you sure you want to delete this postcard?"
-            },
-            zh: {
-                appTitle: "皮克敏 Bloom 明信片圖鑑",
-                appSubtitle: "明信片收藏與冒險記錄",
-                addPostcard: "新增明信片",
-                searchPlaceholder: "搜尋標題或地點...",
-                filterSourceLabel: "來源：",
-                allSources: "所有來源",
-                sourceFlower: "大花朵",
-                sourceMushroom: "蘑菇對戰",
-                sortLabel: "排序：",
-                sortNewest: "日期：最新優先",
-                sortOldest: "日期：最舊優先",
-                sortTitle: "標題 (A-Z)",
-                emptyTitle: "尚未收藏任何明信片",
-                emptyDescription: "您的圖鑑目前為空白。點擊下方按鈕上傳第一張明信片，記錄您的皮克敏冒險旅程。",
-                addFirstPostcard: "上傳第一張明信片",
-                modalUploadTitle: "新增明信片記錄",
-                labelTitle: "明信片名稱 *",
-                labelLocation: "詳細地點地址 *",
-                labelDate: "獲得日期 *",
-                labelSource: "獲得來源 *",
-                labelImage: "明信片照片 *",
-                imgTypeFile: "檔案上傳",
-                imgTypeUrl: "圖片網址",
-                fileChoosePrompt: "點擊選擇 PNG 或 JPEG 圖片",
-                btnCancel: "取消",
-                btnSave: "儲存明信片",
-                inspectLocation: "詳細地點",
-                inspectSource: "獲得來源",
-                inspectDateLabel: "獲得日期",
-                btnClose: "關閉",
-                countText: "張明信片",
-                langToggle: "English",
-                errorFillFields: "請填寫所有必填欄位並選擇圖片。",
-                confirmDelete: "確定要刪除這張明信片嗎？"
-            }
-        };
+    <!-- MODAL 3: DEVELOPER SERVER.JS INSPECTOR MODAL -->
+    <div v-if="showDevModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-slate-900 rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden border border-slate-800 text-slate-100">
+        
+        <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+            <h3 class="text-sm font-mono font-bold text-slate-200">Express & Mongoose Integration (server.js)</h3>
+          </div>
+          <button @click="showDevModal = false" class="text-slate-400 hover:text-slate-200">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
 
-        // Application State
-        let currentLang = 'en';
-        let postcards = []; // Holds current loaded cards
-        let currentInspectedCardId = null;
+        <div class="p-6 space-y-4">
+          <p class="text-xs text-slate-400">
+            This web app connects to a live backend. Target Mongo DB: <span class="text-sky-400 font-mono">postcard</span> | Target Collection: <span class="text-sky-400 font-mono">bread</span>
+          </p>
 
-        // Memory store key for local fallback
-        const STORAGE_KEY = 'pikmin_bloom_postcards_v2';
+          <div class="relative">
+            <pre class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-emerald-400 overflow-x-auto border border-slate-800 max-h-96 leading-relaxed"><code>{{ serverJsCode }}</code></pre>
+            <button 
+              @click="copyServerCode" 
+              class="absolute top-3 right-3 bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 px-2.5 py-1 rounded border border-slate-700 transition-colors"
+            >
+              {{ copiedCode ? 'Copied!' : 'Copy Code' }}
+            </button>
+          </div>
+        </div>
 
-        // DOM Elements
-        const galleryGrid = document.getElementById('galleryGrid');
-        const emptyState = document.getElementById('emptyState');
-        const searchInput = document.getElementById('searchInput');
-        const filterSource = document.getElementById('filterSource');
-        const sortOrder = document.getElementById('sortOrder');
-        const postcardCountText = document.getElementById('postcardCountText');
-        const langToggleBtn = document.getElementById('langToggleBtn');
-        const langText = document.getElementById('langText');
+        <div class="px-6 py-3 bg-slate-950/50 border-t border-slate-800 flex justify-end">
+          <button @click="showDevModal = false" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 rounded-lg">
+            {{ t('closeBtn') }}
+          </button>
+        </div>
 
-        // Modal Elements - Upload
-        const uploadModal = document.getElementById('uploadModal');
-        const openUploadBtn = document.getElementById('openUploadBtn');
-        const emptyUploadBtn = document.getElementById('emptyUploadBtn');
-        const closeUploadModalBtn = document.getElementById('closeUploadModalBtn');
-        const cancelUploadBtn = document.getElementById('cancelUploadBtn');
-        const postcardForm = document.getElementById('postcardForm');
-        const postFile = document.getElementById('postFile');
-        const fileNameDisplay = document.getElementById('fileNameDisplay');
-        const filePickerContainer = document.getElementById('filePickerContainer');
-        const urlInputContainer = document.getElementById('urlInputContainer');
-        const formErrorMessage = document.getElementById('formErrorMessage');
+      </div>
+    </div>
 
-        // Modal Elements - Inspect
-        const inspectModal = document.getElementById('inspectModal');
-        const closeInspectBtn = document.getElementById('closeInspectBtn');
-        const closeInspectBottomBtn = document.getElementById('closeInspectBottomBtn');
-        const deletePostcardBtn = document.getElementById('deletePostcardBtn');
-        const inspectImage = document.getElementById('inspectImage');
-        const inspectTitle = document.getElementById('inspectTitle');
-        const inspectLocationText = document.getElementById('inspectLocationText');
-        const inspectSourceBadge = document.getElementById('inspectSourceBadge');
-        const inspectSourceText = document.getElementById('inspectSourceText');
-        const inspectDateText = document.getElementById('inspectDateText');
+  </div>
 
-        // Initialize App
-        document.addEventListener('DOMContentLoaded', () => {
-            initLanguage();
-            fetchPostcards();
-            setupEventListeners();
-            
-            // Set default date picker to today
-            document.getElementById('postDate').valueToDate = new Date();
-            document.getElementById('postDate').value = new Date().toISOString().split('T')[0];
+  <script>
+    const { createApp, ref, computed, onMounted } = Vue;
+
+    createApp({
+      setup() {
+        // --- State Management ---
+        const currentLang = ref('en');
+        const postcards = ref([]);
+        const loading = ref(false);
+        const submitting = ref(false);
+        const filterType = ref('ALL');
+        const apiConnected = ref(false);
+
+        // Modals state
+        const showUploadModal = ref(false);
+        const selectedPostcard = ref(null);
+        const showDevModal = ref(false);
+        const copiedCode = ref(false);
+
+        // Form state
+        const imageInputType = ref('file'); // 'file' or 'url'
+        const form = ref({
+          title: '',
+          sourceType: 'Flower',
+          address: '',
+          date: new Date().toISOString().split('T')[0],
+          image: '',
+          imageUrlInput: ''
         });
 
-        // Language Switching Logic
-        function initLanguage() {
-            updateI18nText();
-        }
+        // Backend Server Code for Developer Modal
+        const serverJsCode = `require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
-            langText.textContent = i18nData[currentLang].langToggle;
-            updateI18nText();
-            renderGallery();
-        }
+const app = express();
+app.use(express.json({ limit: '15mb' }));
+app.use(cors());
 
-        function updateI18nText() {
-            const dict = i18nData[currentLang];
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[key]) el.textContent = dict[key];
-            });
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-                const key = el.getAttribute('data-i18n-placeholder');
-                if (dict[key]) el.placeholder = dict[key];
-            });
-        }
+const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
 
-        // Data Management (REST API with Local Fallback)
-        async function fetchPostcards() {
-            try {
-                // Background fetch to API endpoint
-                const res = await fetch('/api/postcards');
-                if (res.ok) {
-                    postcards = await res.json();
-                } else {
-                    throw new Error('API server returned error');
-                }
-            } catch (err) {
-                // Fallback to local browser memory storage if API endpoint is absent/fails
-                const stored = localStorage.getItem(STORAGE_KEY);
-                postcards = stored ? JSON.parse(stored) : [];
-            }
-            renderGallery();
-        }
+// Connect to MongoDB Atlas (Database: postcard)
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('Successfully connected to MongoDB Atlas [postcard]'))
+  .catch((err) => console.error('MongoDB connection error:', err));
 
-        async function savePostcardData(newCard) {
-            try {
-                const res = await fetch('/api/postcards', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(newCard)
-                });
-                if (res.ok) {
-                    const saved = await res.json();
-                    postcards.unshift(saved);
-                } else {
-                    throw new Error('API save failed');
-                }
-            } catch (err) {
-                // Local memory fallback
-                postcards.unshift(newCard);
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(postcards));
-            }
-            renderGallery();
-        }
+// Schema & Model mapping to Collection 'bread'
+const postcardSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  sourceType: { type: String, required: true }, // 'Flower' | 'Mushroom Fight'
+  address: { type: String, required: true },
+  date: { type: String, required: true },
+  image: { type: String, required: true }
+}, { collection: 'bread' });
 
-        async function deletePostcardData(id) {
-            try {
-                await fetch(`/api/postcards/${id}`, { method: 'DELETE' });
-            } catch (err) {
-                // Silence API error for local fallback
-            }
-            postcards = postcards.filter(c => c.id !== id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(postcards));
-            renderGallery();
-        }
+const Postcard = mongoose.model('Postcard', postcardSchema);
 
-        // Render Gallery View
-        function renderGallery() {
-            const query = searchInput.value.trim().toLowerCase();
-            const sourceFilter = filterSource.value;
-            const sort = sortOrder.value;
+// REST API Endpoints
+app.get('/api/postcards', async (req, res) => {
+  try {
+    const list = await Postcard.find().sort({ _id: -1 });
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-            // Filter logic
-            let filtered = postcards.filter(card => {
-                const matchQuery = (card.title || '').toLowerCase().includes(query) || 
-                                   (card.location || '').toLowerCase().includes(query);
-                const matchSource = sourceFilter === 'ALL' || card.source === sourceFilter;
-                return matchQuery && matchSource;
-            });
+app.post('/api/postcards', async (req, res) => {
+  try {
+    const newCard = new Postcard(req.body);
+    const saved = await newCard.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
-            // Sort logic
-            filtered.sort((a, b) => {
-                if (sort === 'newest') return new Date(b.date) - new Date(a.date);
-                if (sort === 'oldest') return new Date(a.date) - new Date(b.date);
-                if (sort === 'title') return (a.title || '').localeCompare(b.title || '');
-                return 0;
-            });
+app.listen(PORT, () => {
+  console.log(\`Server running on port \${PORT}\`);
+});`;
 
-            // Update Count Display
-            const dict = i18nData[currentLang];
-            postcardCountText.textContent = `${filtered.length} ${dict.countText}`;
-
-            // Render Empty or Grid State
-            if (filtered.length === 0) {
-                galleryGrid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                galleryGrid.classList.remove('hidden');
-                
-                galleryGrid.innerHTML = filtered.map(card => `
-                    <div onclick="openInspector('${card.id}')" class="group bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition cursor-pointer flex flex-col">
-                        <div class="relative w-full aspect-[4/3] bg-slate-100 overflow-hidden">
-                            <img src="${escapeHtml(card.imageUrl)}" alt="${escapeHtml(card.title)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x450/e2e8f0/64748b?text=Postcard+Image'">
-                            <span class="absolute top-3 left-3 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-md text-[10px] font-bold tracking-wider uppercase text-slate-700 shadow-sm border border-white/50">
-                                ${card.source === 'Mushroom Fight' ? (currentLang === 'zh' ? '蘑菇對戰' : 'Mushroom') : (currentLang === 'zh' ? '大花朵' : 'Big Flower')}
-                            </span>
-                        </div>
-                        <div class="p-4 flex-1 flex flex-col justify-between">
-                            <div>
-                                <h3 class="font-bold text-slate-900 line-clamp-1 group-hover:text-brand-600 transition">${escapeHtml(card.title)}</h3>
-                                <p class="text-xs text-slate-500 mt-1 flex items-center line-clamp-1">
-                                    <svg class="w-3.5 h-3.5 text-slate-400 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    ${escapeHtml(card.location)}
-                                </p>
-                            </div>
-                            <div class="mt-3 pt-3 border-t border-slate-100 text-[11px] text-slate-400 font-medium">
-                                ${escapeHtml(card.date)}
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // Helper: Escape HTML to avoid XSS
-        function escapeHtml(str) {
-            return (str || '').replace(/[&<>"']/g, match => {
-                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[match];
-            });
-        }
-
-        // Open Inspector View
-        window.openInspector = function(id) {
-            const card = postcards.find(c => c.id === id);
-            if (!card) return;
-
-            currentInspectedCardId = id;
-            inspectImage.src = card.imageUrl;
-            inspectTitle.textContent = card.title;
-            inspectLocationText.textContent = card.location;
-            
-            const isMushroom = card.source === 'Mushroom Fight';
-            inspectSourceBadge.textContent = isMushroom ? 
-                (currentLang === 'zh' ? '蘑菇對戰' : 'Mushroom Battle') : 
-                (currentLang === 'zh' ? '大花朵' : 'Big Flower');
-            
-            inspectSourceText.textContent = isMushroom ? 
-                (currentLang === 'zh' ? '蘑菇對戰' : 'Mushroom Battle') : 
-                (currentLang === 'zh' ? '大花朵' : 'Big Flower');
-            
-            inspectDateText.textContent = card.date;
-
-            inspectModal.classList.remove('hidden');
+        // --- Translations ---
+        const dictionary = {
+          en: {
+            appTitle: 'Pikmin Bloom',
+            appSubtitle: 'Postcard Gallery Archive',
+            addPostcardBtn: 'Add Postcard',
+            serverCodeBtn: 'Node.js Backend Code',
+            totalCount: 'Total Postcards',
+            apiLive: 'API Connected',
+            apiLocalOnly: 'Local Storage Fallback',
+            filterLabel: 'Filter Type',
+            filterAll: 'All Types',
+            typeFlower: 'Flower',
+            typeMushroom: 'Mushroom Fight',
+            refreshTooltip: 'Refresh Data',
+            emptyStateTitle: 'This collection has no data',
+            emptyStateDesc: 'There are no postcards logged yet. Click below to add your first postcard.',
+            loading: 'Loading postcards...',
+            viewDetails: 'View Details',
+            formImageLabel: 'Postcard Image',
+            uploadLocalFile: 'Local File',
+            uploadImageUrl: 'Image URL',
+            clickToChooseFile: 'Click to select image file from device',
+            urlPlaceholder: 'https://example.com/postcard.jpg',
+            livePreviewLabel: 'Live Image Preview',
+            noPreviewAvailable: 'No image selected for preview',
+            formTitleLabel: 'Title / Location Name',
+            titlePlaceholder: 'e.g. Historic Clock Tower Flower',
+            formTypeLabel: 'Source Type',
+            formAddressLabel: 'Detailed Address',
+            addressPlaceholder: 'e.g. 100 Main Street, San Francisco, CA',
+            formDateLabel: 'Obtained Date',
+            cancelBtn: 'Cancel',
+            submitBtn: 'Save Postcard',
+            closeBtn: 'Close',
+            footerText: 'Pikmin Bloom Postcard Gallery Management System'
+          },
+          zh: {
+            appTitle: '皮克敏 Bloom',
+            appSubtitle: '皮克敏明信片圖鑑與典藏',
+            addPostcardBtn: '新增明信片',
+            serverCodeBtn: '後端程式碼檢視',
+            totalCount: '明信片總數',
+            apiLive: 'API 連線正常',
+            apiLocalOnly: '離線快取模式',
+            filterLabel: '篩選類別',
+            filterAll: '全部類別',
+            typeFlower: '大花朵 (Flower)',
+            typeMushroom: '蘑菇戰 (Mushroom Fight)',
+            refreshTooltip: '重新整理',
+            emptyStateTitle: '尚無任何明信片資料',
+            emptyStateDesc: '此集合目前沒有任何內容，請點擊下方按鈕上傳並建立第一張明信片。',
+            loading: '載入明信片資料中...',
+            viewDetails: '檢視細節',
+            formImageLabel: '明信片圖片',
+            uploadLocalFile: '本機檔案',
+            uploadImageUrl: '圖片網址 URL',
+            clickToChooseFile: '點擊選擇裝置中的圖片檔案',
+            urlPlaceholder: 'https://example.com/postcard.jpg',
+            livePreviewLabel: '實時圖片預覽 (Live Preview)',
+            noPreviewAvailable: '尚未選擇或輸入圖片',
+            formTitleLabel: '標題 / 地標名稱',
+            titlePlaceholder: '例如：中央公園巨石大花朵',
+            formTypeLabel: '來源類型',
+            formAddressLabel: '詳細地址資訊',
+            addressPlaceholder: '例如：台北市信義區信義路五段7號',
+            formDateLabel: '獲得日期',
+            cancelBtn: '取消',
+            submitBtn: '儲存明信片',
+            closeBtn: '關閉',
+            footerText: '皮克敏 Bloom 明信片管理與檢視系統'
+          }
         };
 
-        function closeInspector() {
-            inspectModal.classList.add('hidden');
-            currentInspectedCardId = null;
-        }
+        const t = (key) => dictionary[currentLang.value][key] || key;
 
-        // Setup Event Handlers
-        function setupEventListeners() {
-            langToggleBtn.addEventListener('click', toggleLanguage);
+        const toggleLang = () => {
+          currentLang.value = currentLang.value === 'en' ? 'zh' : 'en';
+        };
 
-            // Filter controls
-            searchInput.addEventListener('input', renderGallery);
-            filterSource.addEventListener('change', renderGallery);
-            sortOrder.addEventListener('change', renderGallery);
+        // Filtered Computed Property
+        const filteredPostcards = computed(() => {
+          if (filterType.value === 'ALL') return postcards.value;
+          return postcards.value.filter(item => item.sourceType === filterType.value);
+        });
 
-            // Modal Open/Close Controls
-            openUploadBtn.addEventListener('click', openUploadModal);
-            emptyUploadBtn.addEventListener('click', openUploadModal);
-            closeUploadModalBtn.addEventListener('click', closeUploadModal);
-            cancelUploadBtn.addEventListener('click', closeUploadModal);
-            document.getElementById('modalBackdrop').addEventListener('click', closeUploadModal);
+        // --- Fetch Postcards from Express/Mongo REST API ---
+        const fetchPostcards = async () => {
+          loading.value = true;
+          try {
+            const res = await fetch('/api/postcards');
+            if (res.ok) {
+              const data = await res.json();
+              postcards.value = data;
+              apiConnected.value = true;
+            } else {
+              throw new Error('API return non-200 status');
+            }
+          } catch (err) {
+            // Fallback to local browser storage if standalone front-end
+            apiConnected.value = false;
+            const local = localStorage.getItem('pb_postcards');
+            if (local) {
+              try {
+                postcards.value = JSON.parse(local);
+              } catch (e) {
+                postcards.value = [];
+              }
+            } else {
+              postcards.value = [];
+            }
+          } finally {
+            loading.value = false;
+          }
+        };
 
-            // Inspector Modal Controls
-            closeInspectBtn.addEventListener('click', closeInspector);
-            closeInspectBottomBtn.addEventListener('click', closeInspector);
-            document.getElementById('inspectBackdrop').addEventListener('click', closeInspector);
+        // --- Form Handlers & Image Preview ---
+        const openUploadModal = () => {
+          form.value = {
+            title: '',
+            sourceType: 'Flower',
+            address: '',
+            date: new Date().toISOString().split('T')[0],
+            image: '',
+            imageUrlInput: ''
+          };
+          imageInputType.value = 'file';
+          showUploadModal.value = true;
+        };
 
-            // Delete Card
-            deletePostcardBtn.addEventListener('click', async () => {
-                if (!currentInspectedCardId) return;
-                const confirmMsg = i18nData[currentLang].confirmDelete;
-                if (window.confirm(confirmMsg)) {
-                    await deletePostcardData(currentInspectedCardId);
-                    closeInspector();
-                }
-            });
+        const closeUploadModal = () => {
+          showUploadModal.value = false;
+        };
 
-            // Toggle Image Source Type
-            document.querySelectorAll('input[name="imageSourceType"]').forEach(radio => {
-                radio.addEventListener('change', (e) => {
-                    if (e.target.value === 'file') {
-                        filePickerContainer.classList.remove('hidden');
-                        urlInputContainer.classList.add('hidden');
-                    } else {
-                        filePickerContainer.classList.add('hidden');
-                        urlInputContainer.classList.remove('hidden');
-                    }
-                });
-            });
+        // Convert Local Image to Base64 for Preview and Storage
+        const handleFileChange = (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
 
-            // Display file name on upload
-            postFile.addEventListener('change', (e) => {
-                if (e.target.files && e.target.files[0]) {
-                    fileNameDisplay.textContent = e.target.files[0].name;
-                } else {
-                    fileNameDisplay.textContent = i18nData[currentLang].fileChoosePrompt;
-                }
-            });
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            form.value.image = event.target.result; // Direct Base64 data URL
+          };
+          reader.readAsDataURL(file);
+        };
 
-            // Form Submit
-            postcardForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                formErrorMessage.classList.add('hidden');
+        const handleUrlInput = () => {
+          form.value.image = form.value.imageUrlInput;
+        };
 
-                const title = document.getElementById('postTitle').value.trim();
-                const location = document.getElementById('postLocation').value.trim();
-                const date = document.getElementById('postDate').value;
-                const source = document.getElementById('postSource').value;
-                const sourceType = document.querySelector('input[name="imageSourceType"]:checked').value;
+        const onPreviewError = () => {
+          // Reset image if invalid link provided
+        };
 
-                let imageUrl = '';
+        const handleImageError = (e) => {
+          // Placeholder fallback image icon if broken link
+          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+        };
 
-                if (sourceType === 'file') {
-                    const file = postFile.files[0];
-                    if (!file) {
-                        showFormError(i18nData[currentLang].errorFillFields);
-                        return;
-                    }
-                    try {
-                        imageUrl = await readFileAsBase64(file);
-                    } catch (err) {
-                        showFormError('Failed to process image file.');
-                        return;
-                    }
-                } else {
-                    imageUrl = document.getElementById('postUrl').value.trim();
-                    if (!imageUrl) {
-                        showFormError(i18nData[currentLang].errorFillFields);
-                        return;
-                    }
-                }
+        // --- Form Submission ---
+        const submitPostcard = async () => {
+          if (!form.value.title || !form.value.address || !form.value.image) return;
 
-                if (!title || !location || !date || !imageUrl) {
-                    showFormError(i18nData[currentLang].errorFillFields);
-                    return;
-                }
+          submitting.value = true;
+          const payload = {
+            title: form.value.title,
+            sourceType: form.value.sourceType,
+            address: form.value.address,
+            date: form.value.date,
+            image: form.value.image
+          };
 
-                const newCard = {
-                    id: 'card_' + Date.now(),
-                    title,
-                    location,
-                    date,
-                    source,
-                    imageUrl
-                };
+          try {
+            if (apiConnected.value) {
+              const res = await fetch('/api/postcards', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+              if (res.ok) {
+                await fetchPostcards();
+              } else {
+                throw new Error('Save failed');
+              }
+            } else {
+              // Store locally in fallback mode
+              const newEntry = { _id: 'local_' + Date.now(), ...payload };
+              postcards.value.unshift(newEntry);
+              localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
+            }
+            closeUploadModal();
+          } catch (err) {
+            alert('Failed to save postcard. Please check your network or server connection.');
+          } finally {
+            submitting.value = false;
+          }
+        };
 
-                await savePostcardData(newCard);
-                closeUploadModal();
-                postcardForm.reset();
-                fileNameDisplay.textContent = i18nData[currentLang].fileChoosePrompt;
-            });
-        }
+        const openDetailsModal = (item) => {
+          selectedPostcard.value = item;
+        };
 
-        function showFormError(msg) {
-            formErrorMessage.textContent = msg;
-            formErrorMessage.classList.remove('hidden');
-        }
+        const copyServerCode = () => {
+          navigator.clipboard.writeText(serverJsCode);
+          copiedCode.value = true;
+          setTimeout(() => copiedCode.value = false, 2000);
+        };
 
-        function openUploadModal() {
-            uploadModal.classList.remove('hidden');
-        }
+        onMounted(() => {
+          fetchPostcards();
+        });
 
-        function closeUploadModal() {
-            uploadModal.classList.add('hidden');
-            formErrorMessage.classList.add('hidden');
-        }
-
-        function readFileAsBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
-    </script>
+        return {
+          currentLang,
+          t,
+          toggleLang,
+          postcards,
+          filteredPostcards,
+          loading,
+          submitting,
+          filterType,
+          apiConnected,
+          showUploadModal,
+          showDevModal,
+          selectedPostcard,
+          imageInputType,
+          form,
+          serverJsCode,
+          copiedCode,
+          openUploadModal,
+          closeUploadModal,
+          handleFileChange,
+          handleUrlInput,
+          onPreviewError,
+          handleImageError,
+          submitPostcard,
+          openDetailsModal,
+          fetchPostcards,
+          copyServerCode
+        };
+      }
+    }).mount('#app');
+  </script>
 </body>
 </html>
