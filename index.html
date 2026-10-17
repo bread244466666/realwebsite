@@ -336,7 +336,7 @@
       </div>
     </div>
 
-    <!-- MODAL 2: CARD DETAILS VIEW -->
+    <!-- MODAL 2: CARD DETAILS VIEW (已移除檢舉按鈕) -->
     <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
         <div class="relative bg-slate-900 aspect-[4/3] w-full">
@@ -366,20 +366,8 @@
             <span>{{ selectedPostcard.address }}</span>
           </div>
 
-          <!-- UI 提示狀態區塊 -->
-          <div v-if="reportStatus.message" class="mb-4 p-3 rounded-lg text-xs font-medium flex items-center space-x-2" :class="reportStatus.isError ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'">
-            <span>{{ reportStatus.message }}</span>
-          </div>
-
-          <!-- 動作按鈕：檢舉與關閉 -->
-          <div class="flex items-center justify-between">
-            <button 
-              @click="reportPostcard(selectedPostcard._id)" 
-              class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200 flex items-center space-x-1"
-            >
-              <span>檢舉此明信片</span>
-            </button>
-
+          <!-- 關閉按鈕 -->
+          <div class="flex justify-end">
             <button 
               @click="selectedPostcard = null" 
               class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors"
@@ -407,8 +395,6 @@
 
         const showUploadModal = ref(false);
         const selectedPostcard = ref(null);
-        
-        const reportStatus = ref({ message: '', isError: false });
 
         const imageInputType = ref('file');
         const form = ref({
@@ -604,34 +590,7 @@
           }
         };
 
-        // 檢舉明信片函式（每日最多 3 次檢舉限制）
-        const reportPostcard = async (id) => {
-          reportStatus.value = { message: '', isError: false };
-
-          try {
-            const res = await fetch(`/api/postcards/${id}/report`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' }
-            });
-            
-            const data = await res.json();
-            
-            if (res.ok) {
-              reportStatus.value = { message: '檢舉成功。', isError: false };
-              setTimeout(() => {
-                selectedPostcard.value = null;
-                fetchPostcards();
-              }, 1200);
-            } else {
-              reportStatus.value = { message: data.error || '檢舉失敗', isError: true };
-            }
-          } catch (err) {
-            reportStatus.value = { message: '網路連線錯誤，無法完成檢舉。', isError: true };
-          }
-        };
-
         const openDetailsModal = (item) => {
-          reportStatus.value = { message: '', isError: false };
           selectedPostcard.value = item;
         };
 
@@ -653,14 +612,12 @@
           selectedPostcard,
           imageInputType,
           form,
-          reportStatus,
           openUploadModal,
           closeUploadModal,
           handleFileChange,
           handleUrlInput,
           handleImageError,
           submitPostcard,
-          reportPostcard,
           openDetailsModal,
           fetchPostcards
         };
