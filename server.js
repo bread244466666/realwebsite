@@ -87,7 +87,7 @@ app.post('/api/postcards/:id/report', async (req, res) => {
 
     // 檢查：如果該明信片已經被解決過（hasBeenResolved 為 true），則永遠不能再被檢舉
     if (postcard.hasBeenResolved) {
-      return res.status(400).json({ error: '此明信片先前已被檢舉並解除封鎖，已獲得永久免疫，無法再次被檢舉。' });
+      return res.status(400).json({ error: '此明信片先前已被檢舉並解除封鎖，無法再次被檢舉。' });
     }
 
     // 檢查該 IP 是否已經檢舉過
