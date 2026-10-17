@@ -539,7 +539,39 @@
 
           const reader = new FileReader();
           reader.onload = (event) => {
-            form.value.image = event.target.result;
+            const img = new Image();
+            img.onload = () => {
+              const canvas = document.createElement('canvas');
+              let width = img.width;
+              let height = img.height;
+
+              // 設定最大寬高限制（例如寬度最大 1200 像素，保持清晰度同時縮小體積）
+              const MAX_WIDTH = 1200;
+              const MAX_HEIGHT = 1200;
+
+              if (width > height) {
+                if (width > MAX_WIDTH) {
+                  height = Math.round((height * MAX_WIDTH) / width);
+                  width = MAX_WIDTH;
+                }
+              } else {
+                if (height > MAX_HEIGHT) {
+                  width = Math.round((width * MAX_HEIGHT) / height);
+                  height = MAX_HEIGHT;
+                }
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+
+              // 關鍵：將圖片轉為 webp 格式，品質設為 0.8（80%），可大幅減少檔案大小
+              const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
+              form.value.image = compressedDataUrl;
+            };
+            img.src = event.target.result;
           };
           reader.readAsDataURL(file);
         };
