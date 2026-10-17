@@ -19,13 +19,15 @@ mongoose.connect(MONGODB_URI)
   .catch((err) => console.error('MongoDB 連線失敗:', err));
 
 // 定義明信片 Schema，並對應到您的 'bread' 集合 (Collection)
+// 定義 Postcard Schema，並加入 ip 欄位
 const postcardSchema = new mongoose.Schema({
   title: { type: String, required: true },
   sourceType: { type: String, required: true }, // 'Flower' 或 'Mushroom Fight'
   address: { type: String, required: true },
   date: { type: String, required: true },
-  image: { type: String, required: true }
-}, { collection: 'bread' });
+  image: { type: String, required: true },
+  ip: { type: String } // 新增這行以接收並儲存 IP 欄位
+}, { collection: 'bread' }); // 強制對應到 bread collection
 
 const Postcard = mongoose.model('Postcard', postcardSchema);
 
