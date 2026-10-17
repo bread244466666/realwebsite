@@ -22,9 +22,8 @@ const postcardSchema = new mongoose.Schema({
   date: { type: String, required: true },
   image: { type: String, required: true },
   ip: { type: String },
-  reports: { type: Number, default: 0 },
   flagged: { type: Boolean, default: false },
-  reportedTokens: { type: [String], default: [] }, // 改用前端傳遞的唯一 Token 陣列防重複檢舉
+  reportTimestamps: { type: [Date], default: [] }, // 記錄每次檢舉的時間，用來計算一天內的檢舉次數
   hasBeenResolved: { type: Boolean, default: false }
 }, { collection: 'bread' });
 
@@ -60,13 +59,12 @@ app.post('/api/postcards', async (req, res) => {
   }
 });
 
-// 檢舉 API（接收前端產生的 uniqueToken）
+// 檢舉 API：限制一天（24小時）內最多只能被檢舉 3 次
 app.post('/api/postcards/:id/report', async (req, res) => {
   try {
     const postcardId = req.params.id;
-    const { clientToken } = req.body; // 從前端接收專屬識別碼
-
     const postcard = await Postcard.findById(postcardId);
+    
     if (!postcard) {
       return res.status(404).json({ error: '找不到該明信片' });
     }
@@ -75,21 +73,27 @@ app.post('/api/postcards/:id/report', async (req, res) => {
       return res.status(400).json({ error: '此明信片已獲得永久免疫，無法再次被檢舉。' });
     }
 
-    if (clientToken && postcard.reportedTokens.includes(clientToken)) {
-      return res.status(400).json({ error: '您已經檢舉過此明信片了！' });
+    // 計算 24 小時（一天）內的有效檢舉次數
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    
+    // 過濾出過去 24 小時內的檢舉紀錄
+    const recentReports = postcard.reportTimestamps.filter(timestamp => new Date(timestamp) > oneDayAgo);
+
+    if (recentReports.length >= 3) {
+      return res.status(400).json({ error: '此明信片今日被檢舉次數已達上限（每日最多 3 次）。' });
     }
 
-    postcard.reports += 1;
-    if (clientToken) {
-      postcard.reportedTokens.push(clientToken);
-    }
+    // 記錄這次檢舉的時間
+    postcard.reportTimestamps.push(now);
 
-    if (postcard.reports >= 3) {
+    // 如果過去 24 小時內的總檢舉次數達到 3 次，則標記隱藏
+    if (postcard.reportTimestamps.length >= 3) {
       postcard.flagged = true;
     }
 
     await postcard.save();
-    res.json({ message: '檢舉成功', reports: postcard.reports, flagged: postcard.flagged });
+    res.json({ message: '檢舉成功', count: postcard.reportTimestamps.length, flagged: postcard.flagged });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
