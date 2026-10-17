@@ -38,10 +38,17 @@ mongoose.connect(MONGODB_URI)
   .catch((err) => console.error('MongoDB 連線失敗:', err));
 
 // API 路由：取得明信片（限制預設回傳最新 50 筆以優化效能）
+// API 路由：支援分頁查詢
 app.get('/api/postcards', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 50; // 可透過 ?limit= 調整，預設 50 筆
-    const postcards = await Postcard.find().sort({ _id: -1 }).limit(limit);
+    const limit = parseInt(req.query.limit) || 30; // 每次抓 30 筆
+    const skip = parseInt(req.query.skip) || 0;   // 略過前幾筆
+
+    const postcards = await Postcard.find()
+      .sort({ _id: -1 })
+      .skip(skip)
+      .limit(limit);
+
     res.json(postcards);
   } catch (err) {
     res.status(500).json({ error: err.message });
