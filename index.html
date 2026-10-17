@@ -584,53 +584,43 @@
         };
 
         const submitPostcard = async () => {
-          if (!form.value.title || !form.value.address || !form.value.image) return;
+  if (!form.value.title || !form.value.address || !form.value.image) return;
 
-          submitting.value = true;
+  submitting.value = true;
 
-          // 自動取得並記錄 IP 傳入資料庫
-          let userIp = '未知 IP';
-          try {
-            const ipRes = await fetch('https://api.ipify.org?format=json');
-            const ipData = await ipRes.json();
-            userIp = ipData.ip;
-          } catch (e) {
-            console.warn('無法取得 IP');
-          }
+  // 只需要傳送表單原本的欄位，IP 會由後端 server.js 自動抓取並寫入
+  const payload = {
+    title: form.value.title,
+    sourceType: form.value.sourceType,
+    address: form.value.address,
+    date: form.value.date,
+    image: form.value.image
+  };
 
-          const payload = {
-            title: form.value.title,
-            sourceType: form.value.sourceType,
-            address: form.value.address,
-            date: form.value.date,
-            image: form.value.image,
-            ip: userIp // 記錄在資料庫的欄位中
-          };
-
-          try {
-            if (apiConnected.value) {
-              const res = await fetch('/api/postcards', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-              });
-              if (res.ok) {
-                await fetchPostcards();
-              } else {
-                throw new Error('Save failed');
-              }
-            } else {
-              const newEntry = { _id: 'local_' + Date.now(), ...payload };
-              postcards.value.unshift(newEntry);
-              localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
-            }
-            closeUploadModal();
-          } catch (err) {
-            alert('儲存明信片失敗。');
-          } finally {
-            submitting.value = false;
-          }
-        };
+  try {
+    if (apiConnected.value) {
+      const res = await fetch('/api/postcards', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        await fetchPostcards();
+      } else {
+        throw new Error('Save failed');
+      }
+    } else {
+      const newEntry = { _id: 'local_' + Date.now(), ...payload, ip: 'Local Mode' };
+      postcards.value.unshift(newEntry);
+      localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
+    }
+    closeUploadModal();
+  } catch (err) {
+    alert('儲存明信片失敗。');
+  } finally {
+    submitting.value = false;
+  }
+};
 
         const openDetailsModal = (item) => {
           selectedPostcard.value = item;
