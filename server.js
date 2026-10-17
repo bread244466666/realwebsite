@@ -4,11 +4,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-
-// 提高 JSON 承載限制以支援 Base64 圖片上傳
+app.set('trust proxy', true); 
 app.use(express.json({ limit: '15mb' }));
 app.use(cors());
-
 // 從環境變數讀取 MongoDB 連線字串
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -44,14 +42,24 @@ app.get('/api/postcards', async (req, res) => {
 // API 路由：新增明信片
 app.post('/api/postcards', async (req, res) => {
   try {
-    const newPostcard = new Postcard(req.body);
+    // 優先從 Cloudflare 標頭抓取真實 IP，其次是 x-forwarded-for，最後才是預設 req.ip
+    const clientIp = req.headers['cf-connecting-ip'] || 
+                     req.headers['x-forwarded-for']?.split(',')[0] || 
+                     req.ip;
+
+    // 將前端傳來的資料與自動抓到的 ip 結合成一個新的物件
+    const postcardData = {
+      ...req.body,
+      ip: clientIp
+    };
+
+    const newPostcard = new Postcard(postcardData);
     const savedPostcard = await newPostcard.save();
     res.status(201).json(savedPostcard);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
-
 app.listen(PORT, () => {
   console.log(`後端伺服器正在運行於 http://localhost:${PORT}`);
 });
