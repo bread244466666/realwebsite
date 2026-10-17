@@ -4,32 +4,29 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-
-// 提高 JSON 承載限制以支援 Base64 圖片上傳
-app.use(express.json({ limit: '15mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(cors());
 
-// 從環境變數讀取 MongoDB 連線字串
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// 連線至 MongoDB 資料庫
+// 連線至 MongoDB
 mongoose.connect(MONGODB_URI)
-  .then(() => console.log('成功連線至 MongoDB 資料庫 (postcard)'))
+  .then(() => console.log('成功連線至 MongoDB 資料庫'))
   .catch((err) => console.error('MongoDB 連線失敗:', err));
 
-// 定義明信片 Schema，並對應到您的 'bread' 集合 (Collection)
+// 定義 Postcard Schema，並明確指定 collection 名稱為 'bread'
 const postcardSchema = new mongoose.Schema({
   title: { type: String, required: true },
   sourceType: { type: String, required: true }, // 'Flower' 或 'Mushroom Fight'
   address: { type: String, required: true },
   date: { type: String, required: true },
   image: { type: String, required: true }
-}, { collection: 'bread' });
+}, { collection: 'bread' }); // 強制對應到您截圖中的 bread collection
 
 const Postcard = mongoose.model('Postcard', postcardSchema);
 
-// API 路由：取得所有明信片
+// API: 取得所有明信片
 app.get('/api/postcards', async (req, res) => {
   try {
     const postcards = await Postcard.find().sort({ _id: -1 });
@@ -39,7 +36,7 @@ app.get('/api/postcards', async (req, res) => {
   }
 });
 
-// API 路由：新增明信片
+// API: 新增明信片
 app.post('/api/postcards', async (req, res) => {
   try {
     const newPostcard = new Postcard(req.body);
@@ -51,5 +48,5 @@ app.post('/api/postcards', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`後端伺服器正在運行於 http://localhost:${PORT}`);
+  console.log(`伺服器正在運行於 http://localhost:${PORT}`);
 });
