@@ -366,7 +366,7 @@
       </div>
     </div>
 
-    <!-- MODAL 2: CARD DETAILS VIEW (IP is recorded in DB payload, but hidden from UI view) -->
+    <!-- MODAL 2: CARD DETAILS VIEW (Includes Report Button) -->
     <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
         <div class="relative bg-slate-900 aspect-[4/3] w-full">
@@ -398,7 +398,18 @@
             <span>{{ selectedPostcard.address }}</span>
           </div>
 
-          <div class="flex justify-end">
+          <!-- 動作按鈕：檢舉與關閉 -->
+          <div class="flex items-center justify-between">
+            <button 
+              @click="reportPostcard(selectedPostcard._id)" 
+              class="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200 flex items-center space-x-1"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+              <span>檢舉此明信片</span>
+            </button>
+
             <button 
               @click="selectedPostcard = null" 
               class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors"
@@ -584,43 +595,66 @@
         };
 
         const submitPostcard = async () => {
-  if (!form.value.title || !form.value.address || !form.value.image) return;
+          if (!form.value.title || !form.value.address || !form.value.image) return;
 
-  submitting.value = true;
+          submitting.value = true;
 
-  // 只需要傳送表單原本的欄位，IP 會由後端 server.js 自動抓取並寫入
-  const payload = {
-    title: form.value.title,
-    sourceType: form.value.sourceType,
-    address: form.value.address,
-    date: form.value.date,
-    image: form.value.image
-  };
+          const payload = {
+            title: form.value.title,
+            sourceType: form.value.sourceType,
+            address: form.value.address,
+            date: form.value.date,
+            image: form.value.image
+          };
 
-  try {
-    if (apiConnected.value) {
-      const res = await fetch('/api/postcards', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        await fetchPostcards();
-      } else {
-        throw new Error('Save failed');
-      }
-    } else {
-      const newEntry = { _id: 'local_' + Date.now(), ...payload, ip: 'Local Mode' };
-      postcards.value.unshift(newEntry);
-      localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
-    }
-    closeUploadModal();
-  } catch (err) {
-    alert('儲存明信片失敗。');
-  } finally {
-    submitting.value = false;
-  }
-};
+          try {
+            if (apiConnected.value) {
+              const res = await fetch('/api/postcards', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+              if (res.ok) {
+                await fetchPostcards();
+              } else {
+                throw new Error('Save failed');
+              }
+            } else {
+              const newEntry = { _id: 'local_' + Date.now(), ...payload };
+              postcards.value.unshift(newEntry);
+              localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
+            }
+            closeUploadModal();
+          } catch (err) {
+            alert('儲存明信片失敗。');
+          } finally {
+            submitting.value = false;
+          }
+        };
+
+        // 檢舉明信片函式
+        const reportPostcard = async (id) => {
+          if (!confirm('確定要檢舉這張明信片嗎？累積超過 3 次檢舉將會被自動隱藏。')) return;
+
+          try {
+            const res = await fetch(`/api/postcards/${id}/report`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' }
+            });
+            
+            const data = await res.json();
+            
+            if (res.ok) {
+              alert('檢舉成功！');
+              selectedPostcard.value = null;
+              await fetchPostcards();
+            } else {
+              alert(data.error || '檢舉失敗');
+            }
+          } catch (err) {
+            alert('網路連線錯誤，無法完成檢舉。');
+          }
+        };
 
         const openDetailsModal = (item) => {
           selectedPostcard.value = item;
@@ -650,6 +684,7 @@
           handleUrlInput,
           handleImageError,
           submitPostcard,
+          reportPostcard,
           openDetailsModal,
           fetchPostcards
         };
