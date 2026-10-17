@@ -72,17 +72,6 @@
 
         <!-- Right Controls -->
         <div class="flex items-center space-x-3">
-          <!-- Backend Dev Server Code Modal Toggle -->
-          <button 
-            @click="showDevModal = true" 
-            class="hidden sm:flex items-center space-x-1.5 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-2 rounded-lg transition-colors border border-slate-200"
-          >
-            <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
-            </svg>
-            <span>{{ t('serverCodeBtn') }}</span>
-          </button>
-
           <!-- Language Toggle -->
           <button 
             @click="toggleLang" 
@@ -228,7 +217,7 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
       <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
-        {{ t('footerText') }} &bull; Target DB: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-600">postcard</code> &bull; Collection: <code class="bg-slate-100 px-1 py-0.5 rounded text-slate-600">bread</code>
+        {{ t('footerText') }}
       </div>
     </footer>
 
@@ -377,7 +366,7 @@
       </div>
     </div>
 
-    <!-- MODAL 2: CARD DETAILS VIEW -->
+    <!-- MODAL 2: CARD DETAILS VIEW (IP is recorded in DB payload, but hidden from UI view) -->
     <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
         <div class="relative bg-slate-900 aspect-[4/3] w-full">
@@ -421,48 +410,6 @@
       </div>
     </div>
 
-    <!-- MODAL 3: DEVELOPER SERVER.JS INSPECTOR MODAL -->
-    <div v-if="showDevModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="bg-slate-900 rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden border border-slate-800 text-slate-100">
-        
-        <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-            <h3 class="text-sm font-mono font-bold text-slate-200">Express & Mongoose Integration (server.js)</h3>
-          </div>
-          <button @click="showDevModal = false" class="text-slate-400 hover:text-slate-200">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
-        </div>
-
-        <div class="p-6 space-y-4">
-          <p class="text-xs text-slate-400">
-            Target Mongo DB: <span class="text-sky-400 font-mono">postcard</span> | Target Collection: <span class="text-sky-400 font-mono">bread</span>
-          </p>
-
-          <div class="relative">
-            <!-- 使用 v-text 確保原始碼能安全渲染，不會引發 Vue 樣版解析錯誤 -->
-            <pre class="bg-slate-950 p-4 rounded-xl text-xs font-mono text-emerald-400 overflow-x-auto border border-slate-800 max-h-96 leading-relaxed"><code v-text="serverJsCode"></code></pre>
-            <button 
-              @click="copyServerCode" 
-              class="absolute top-3 right-3 bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 px-2.5 py-1 rounded border border-slate-700 transition-colors"
-            >
-              {{ copyBtnText }}
-            </button>
-          </div>
-        </div>
-
-        <div class="px-6 py-3 bg-slate-950/50 border-t border-slate-800 flex justify-end">
-          <button @click="showDevModal = false" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 rounded-lg">
-            {{ t('closeBtn') }}
-          </button>
-        </div>
-
-      </div>
-    </div>
-
   </div>
 
   <script>
@@ -479,8 +426,6 @@
 
         const showUploadModal = ref(false);
         const selectedPostcard = ref(null);
-        const showDevModal = ref(false);
-        const copiedCode = ref(false);
 
         const imageInputType = ref('file');
         const form = ref({
@@ -492,61 +437,11 @@
           imageUrlInput: ''
         });
 
-        const serverJsCode = `require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-
-const app = express();
-app.use(express.json({ limit: '15mb' }));
-app.use(cors());
-
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
-
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('Successfully connected to MongoDB Atlas [postcard]'))
-  .catch((err) => console.error('MongoDB connection error:', err));
-
-const postcardSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  sourceType: { type: String, required: true },
-  address: { type: String, required: true },
-  date: { type: String, required: true },
-  image: { type: String, required: true }
-}, { collection: 'bread' });
-
-const Postcard = mongoose.model('Postcard', postcardSchema);
-
-app.get('/api/postcards', async (req, res) => {
-  try {
-    const list = await Postcard.find().sort({ _id: -1 });
-    res.json(list);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.post('/api/postcards', async (req, res) => {
-  try {
-    const newCard = new Postcard(req.body);
-    const saved = await newCard.save();
-    res.status(201).json(saved);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(\`Server running on port \${PORT}\`);
-});`;
-
         const dictionary = {
           en: {
             appTitle: 'Pikmin Bloom',
             appSubtitle: 'Postcard Gallery Archive',
             addPostcardBtn: 'Add Postcard',
-            serverCodeBtn: 'Node.js Backend Code',
             totalCount: 'Total Postcards',
             apiLive: 'API Connected',
             apiLocalOnly: 'Local Storage Fallback',
@@ -581,7 +476,6 @@ app.listen(PORT, () => {
             appTitle: '皮克敏 Bloom',
             appSubtitle: '皮克敏明信片圖鑑與典藏',
             addPostcardBtn: '新增明信片',
-            serverCodeBtn: '後端程式碼檢視',
             totalCount: '明信片總數',
             apiLive: 'API 連線正常',
             apiLocalOnly: '離線快取模式',
@@ -619,9 +513,6 @@ app.listen(PORT, () => {
         const toggleLang = () => {
           currentLang.value = currentLang.value === 'en' ? 'zh' : 'en';
         };
-
-        // 使用 Computed 屬性避免在 HTML 樣版直接寫複雜三元運算子
-        const copyBtnText = computed(() => copiedCode.value ? 'Copied!' : 'Copy Code');
 
         const filteredPostcards = computed(() => {
           if (filterType.value === 'ALL') return postcards.value;
@@ -696,12 +587,24 @@ app.listen(PORT, () => {
           if (!form.value.title || !form.value.address || !form.value.image) return;
 
           submitting.value = true;
+
+          // 自動取得並記錄 IP 傳入資料庫
+          let userIp = '未知 IP';
+          try {
+            const ipRes = await fetch('https://api.ipify.org?format=json');
+            const ipData = await ipRes.json();
+            userIp = ipData.ip;
+          } catch (e) {
+            console.warn('無法取得 IP');
+          }
+
           const payload = {
             title: form.value.title,
             sourceType: form.value.sourceType,
             address: form.value.address,
             date: form.value.date,
-            image: form.value.image
+            image: form.value.image,
+            ip: userIp // 記錄在資料庫的欄位中
           };
 
           try {
@@ -723,7 +626,7 @@ app.listen(PORT, () => {
             }
             closeUploadModal();
           } catch (err) {
-            alert('Failed to save postcard.');
+            alert('儲存明信片失敗。');
           } finally {
             submitting.value = false;
           }
@@ -731,12 +634,6 @@ app.listen(PORT, () => {
 
         const openDetailsModal = (item) => {
           selectedPostcard.value = item;
-        };
-
-        const copyServerCode = () => {
-          navigator.clipboard.writeText(serverJsCode);
-          copiedCode.value = true;
-          setTimeout(() => copiedCode.value = false, 2000);
         };
 
         onMounted(() => {
@@ -754,13 +651,9 @@ app.listen(PORT, () => {
           filterType,
           apiConnected,
           showUploadModal,
-          showDevModal,
           selectedPostcard,
           imageInputType,
           form,
-          serverJsCode,
-          copiedCode,
-          copyBtnText,
           openUploadModal,
           closeUploadModal,
           handleFileChange,
@@ -768,8 +661,7 @@ app.listen(PORT, () => {
           handleImageError,
           submitPostcard,
           openDetailsModal,
-          fetchPostcards,
-          copyServerCode
+          fetchPostcards
         };
       }
     }).mount('#app');
