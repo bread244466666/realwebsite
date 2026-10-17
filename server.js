@@ -28,9 +28,20 @@ const postcardSchema = new mongoose.Schema({
 const Postcard = mongoose.model('Postcard', postcardSchema);
 
 // API 路由：取得所有明信片
+// 連線至 MongoDB 成功後，建立降冪索引以加速排序查詢
+mongoose.connect(MONGODB_URI)
+  .then(async () => {
+    console.log('成功連線至 MongoDB 資料庫 (postcard)');
+    // 確保 _id 索引存在，大幅提升 .sort({ _id: -1 }) 的查詢效能
+    await Postcard.collection.createIndex({ _id: -1 });
+  })
+  .catch((err) => console.error('MongoDB 連線失敗:', err));
+
+// API 路由：取得明信片（限制預設回傳最新 50 筆以優化效能）
 app.get('/api/postcards', async (req, res) => {
   try {
-    const postcards = await Postcard.find().sort({ _id: -1 });
+    const limit = parseInt(req.query.limit) || 50; // 可透過 ?limit= 調整，預設 50 筆
+    const postcards = await Postcard.find().sort({ _id: -1 }).limit(limit);
     res.json(postcards);
   } catch (err) {
     res.status(500).json({ error: err.message });
