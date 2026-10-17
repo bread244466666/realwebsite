@@ -6,15 +6,6 @@
   <title>Pikmin Bloom Postcard Gallery</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4YXL9XEJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-G4YXL9XEJ0');
-</script>
   <!-- Tailwind Configuration for Custom Palette -->
   <script>
     tailwind.config = {
@@ -201,6 +192,17 @@
           </div>
         </div>
       </div>
+
+      <!-- Load More Button -->
+      <div v-if="hasMore && filterType === 'ALL' && postcards.length > 0 && !loading" class="mt-8 text-center pb-6">
+        <button 
+          @click="loadMorePostcards" 
+          :disabled="loadingMore"
+          class="px-6 py-2.5 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-sm transition-all disabled:opacity-50"
+        >
+          {{ loadingMore ? t('loadingMoreText') : t('loadMoreBtn') }}
+        </button>
+      </div>
     </main>
 
     <!-- Footer -->
@@ -345,7 +347,7 @@
       </div>
     </div>
 
-    <!-- MODAL 2: CARD DETAILS VIEW (已移除檢舉按鈕) -->
+    <!-- MODAL 2: CARD DETAILS VIEW -->
     <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
         <div class="relative bg-slate-900 aspect-[4/3] w-full">
@@ -375,7 +377,7 @@
             <span>{{ selectedPostcard.address }}</span>
           </div>
 
-          <!-- 關閉按鈕 -->
+          <!-- Close Button -->
           <div class="flex justify-end">
             <button 
               @click="selectedPostcard = null" 
@@ -401,6 +403,11 @@
         const submitting = ref(false);
         const filterType = ref('ALL');
         const apiConnected = ref(false);
+
+        // Pagination variables
+        const pageSize = 30;
+        const hasMore = ref(true);
+        const loadingMore = ref(false);
 
         const showUploadModal = ref(false);
         const selectedPostcard = ref(null);
@@ -448,6 +455,8 @@
             cancelBtn: 'Cancel',
             submitBtn: 'Save Postcard',
             closeBtn: 'Close',
+            loadMoreBtn: 'Load More Postcards',
+            loadingMoreText: 'Loading...',
             footerText: 'Pikmin Bloom Postcard Gallery Management System'
           },
           zh: {
@@ -482,6 +491,8 @@
             cancelBtn: '取消',
             submitBtn: '儲存明信片',
             closeBtn: '關閉',
+            loadMoreBtn: '載入更多明信片',
+            loadingMoreText: '載入中...',
             footerText: '皮克敏 Bloom 明信片管理與檢視系統'
           }
         };
@@ -497,13 +508,15 @@
           return postcards.value.filter(item => item.sourceType === filterType.value);
         });
 
+        // Initial Fetch (First 30 items)
         const fetchPostcards = async () => {
           loading.value = true;
           try {
-            const res = await fetch('/api/postcards');
+            const res = await fetch(`/api/postcards?limit=${pageSize}&skip=0`);
             if (res.ok) {
               const data = await res.json();
               postcards.value = data;
+              hasMore.value = data.length === pageSize;
               apiConnected.value = true;
             } else {
               throw new Error('API return non-200 status');
@@ -525,6 +538,30 @@
           }
         };
 
+        // Load Next 30 Items
+        const loadMorePostcards = async () => {
+          if (loadingMore.value || !hasMore.value) return;
+          loadingMore.value = true;
+
+          try {
+            const skipCount = postcards.value.length;
+            const res = await fetch(`/api/postcards?limit=${pageSize}&skip=${skipCount}`);
+            if (res.ok) {
+              const data = await res.json();
+              if (data.length > 0) {
+                postcards.value.push(...data);
+              }
+              if (data.length < pageSize) {
+                hasMore.value = false;
+              }
+            }
+          } catch (err) {
+            console.error('Failed to load more postcards', err);
+          } finally {
+            loadingMore.value = false;
+          }
+        };
+
         const openUploadModal = () => {
           form.value = {
             title: '',
@@ -542,6 +579,7 @@
           showUploadModal.value = false;
         };
 
+        // Automatic Canvas WebP Compression & Resize (Max 1200px)
         const handleFileChange = (e) => {
           const file = e.target.files[0];
           if (!file) return;
@@ -554,7 +592,6 @@
               let width = img.width;
               let height = img.height;
 
-              // 設定最大寬高限制（例如寬度最大 1200 像素，保持清晰度同時縮小體積）
               const MAX_WIDTH = 1200;
               const MAX_HEIGHT = 1200;
 
@@ -576,7 +613,6 @@
               const ctx = canvas.getContext('2d');
               ctx.drawImage(img, 0, 0, width, height);
 
-              // 關鍵：將圖片轉為 webp 格式，品質設為 0.8（80%），可大幅減少檔案大小
               const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
               form.value.image = compressedDataUrl;
             };
@@ -649,6 +685,8 @@
           submitting,
           filterType,
           apiConnected,
+          hasMore,
+          loadingMore,
           showUploadModal,
           selectedPostcard,
           imageInputType,
@@ -659,6 +697,7 @@
           handleUrlInput,
           handleImageError,
           submitPostcard,
+          loadMorePostcards,
           openDetailsModal,
           fetchPostcards
         };
