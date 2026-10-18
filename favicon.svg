@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <rect width="64" height="64" rx="16" fill="#0F172A" />
+  <!-- Location Pin Body -->
+  <path d="M32 14 C22 14 14 22 14 32 C14 44 32 56 32 56 C32 56 50 44 50 32 C50 22 42 14 32 14 Z" fill="#1E293B" stroke="#38BDF8" stroke-width="3" />
+  <!-- Center Node -->
+  <circle cx="32" cy="32" r="5" fill="#38BDF8" />
+  <!-- Sprout Top -->
+  <path d="M32 14 C26 6 20 8 24 2 C32 4 34 10 32 14 Z" fill="#4ADE80" />
+  <path d="M32 14 C38 6 44 8 40 2 C32 4 30 10 32 14 Z" fill="#22C55E" />
+</svg>
