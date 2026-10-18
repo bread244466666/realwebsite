@@ -61,19 +61,24 @@
         <!-- Brand Title -->
         <div class="flex items-center space-x-3">
   <!-- Icon Container -->
-  <div class="w-9 h-9 rounded-lg bg-brand-700 text-white flex items-center justify-center font-bold shadow-sm overflow-hidden p-1.5">
+  <div class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold shadow-sm overflow-hidden p-1">
     
-    <!-- Your Custom SVG goes here -->
+    <!-- Geo-Sprout Pin SVG -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full">
-      <rect width="64" height="64" rx="16" fill="#0F172A"/>
-      <!-- Path or shapes of your icon -->
-      <path d="M32 50 V28 M32 38 H42 M32 44 H22" stroke="#22C55E" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="42" cy="38" r="2.5" fill="#22C55E"/>
-      <circle cx="22" cy="44" r="2.5" fill="#22C55E"/>
-      <path d="M32 26 C20 18 22 6 32 10 C42 6 44 18 32 26 Z" fill="#4ADE80"/>
+      <path d="M32 14 C22 14 14 22 14 32 C14 44 32 56 32 56 C32 56 50 44 50 32 C50 22 42 14 32 14 Z" fill="#1E293B" stroke="#38BDF8" stroke-width="3"/>
+      <circle cx="32" cy="32" r="5" fill="#38BDF8"/>
+      <path d="M32 14 C26 6 20 8 24 2 C32 4 34 10 32 14 Z" fill="#4ADE80"/>
+      <path d="M32 14 C38 6 44 8 40 2 C32 4 30 10 32 14 Z" fill="#22C55E"/>
     </svg>
 
   </div>
+
+  <!-- Text Section -->
+  <div>
+    <h1 class="text-lg font-bold text-slate-900 tracking-tight leading-none">{{ t('appTitle') }}</h1>
+    <span class="text-xs text-slate-500 font-medium">{{ t('appSubtitle') }}</span>
+  </div>
+</div>
 
   <!-- Text Section -->
   <div>
