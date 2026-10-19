@@ -3,22 +3,30 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+// Optional: `npm i compression` to gzip/brotli-free JSON responses. Server still runs without it.
+let compression = null;
+try { compression = require('compression'); } catch (e) { /* not installed */ }
+
 const app = express();
-app.set('trust proxy', true); 
+app.set('trust proxy', true);
+if (compression) app.use(compression());
 app.use(express.json({ limit: '15mb' }));
 app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
+// Connect once (the original connected twice) and make sure the sort index exists.
 mongoose.connect(MONGODB_URI)
-  .then(() => console.log('成功連線至 MongoDB 資料庫 (postcard)'))
+  .then(async () => {
+    console.log('成功連線至 MongoDB 資料庫 (postcard)');
+    await Postcard.collection.createIndex({ _id: -1 });
+  })
   .catch((err) => console.error('MongoDB 連線失敗:', err));
 
-// 定義基本的 Postcard Schema（已移除檢舉相關欄位）
 const postcardSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  sourceType: { type: String, required: true }, 
+  sourceType: { type: String, required: true },
   address: { type: String, required: true },
   date: { type: String, required: true },
   image: { type: String, required: true },
@@ -27,51 +35,82 @@ const postcardSchema = new mongoose.Schema({
 
 const Postcard = mongoose.model('Postcard', postcardSchema);
 
-// API 路由：取得所有明信片
-// 連線至 MongoDB 成功後，建立降冪索引以加速排序查詢
-mongoose.connect(MONGODB_URI)
-  .then(async () => {
-    console.log('成功連線至 MongoDB 資料庫 (postcard)');
-    // 確保 _id 索引存在，大幅提升 .sort({ _id: -1 }) 的查詢效能
-    await Postcard.collection.createIndex({ _id: -1 });
-  })
-  .catch((err) => console.error('MongoDB 連線失敗:', err));
+const MAX_LIMIT = 100;
 
-// API 路由：取得明信片（限制預設回傳最新 50 筆以優化效能）
-// API 路由：支援分頁查詢
+// List postcards.
+// Performance: images are stored as base64 data URLs inside MongoDB. Sending them inside the
+// list JSON makes the response huge and uncacheable. Here the database strips them out and the
+// browser fetches each one from /api/postcards/:id/image instead (cacheable, lazy-loadable).
+// Privacy: the `ip` field is no longer sent to visitors.
 app.get('/api/postcards', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 30; // 每次抓 30 筆
-    const skip = parseInt(req.query.skip) || 0;   // 略過前幾筆
+    const limit = Math.min(Math.max(parseInt(req.query.limit) || 30, 1), MAX_LIMIT);
+    const skip = Math.max(parseInt(req.query.skip) || 0, 0);
 
-    const postcards = await Postcard.find()
-      .sort({ _id: -1 })
-      .skip(skip)
-      .limit(limit);
+    const docs = await Postcard.aggregate([
+      { $sort: { _id: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $project: {
+          title: 1, sourceType: 1, address: 1, date: 1,
+          // null when the image is a data: URL (served separately); real URLs pass through
+          image: {
+            $cond: [{ $eq: [{ $substrBytes: ['$image', 0, 5] }, 'data:'] }, null, '$image']
+          }
+        }
+      }
+    ]);
 
-    res.json(postcards);
+    res.json(docs.map((d) => ({
+      ...d,
+      image: d.image || `/api/postcards/${d._id}/image`
+    })));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// API 路由：新增明信片（保留重複明信片自動清理舊資料的功能）
+// Serve one stored image as a real image file with long-lived caching.
+app.get('/api/postcards/:id/image', async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.sendStatus(404);
+    const doc = await Postcard.findById(req.params.id).select('image').lean();
+    if (!doc || !doc.image) return res.sendStatus(404);
+
+    const m = /^data:(image\/[\w.+-]+);base64,(.*)$/s.exec(doc.image);
+    if (!m) return res.redirect(doc.image); // plain URL stored instead of data URL
+
+    res.set({
+      'Content-Type': m[1],
+      // An image never changes for a given id, so browsers/CDNs can keep it for a year.
+      'Cache-Control': 'public, max-age=31536000, immutable'
+    });
+    res.send(Buffer.from(m[2], 'base64'));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add a postcard (unchanged behaviour: replaces an older duplicate with same title + address).
 app.post('/api/postcards', async (req, res) => {
   try {
-    const clientIp = req.headers['cf-connecting-ip'] || 
-                     req.headers['x-forwarded-for']?.split(',')[0] || 
+    const clientIp = req.headers['cf-connecting-ip'] ||
+                     req.headers['x-forwarded-for']?.split(',')[0] ||
                      req.ip || 'unknown';
 
     const { title, address } = req.body;
-    const duplicates = await Postcard.find({ title: title, address: address }).sort({ _id: 1 });
-    
+    const duplicates = await Postcard.find({ title: title, address: address })
+      .select('_id').sort({ _id: 1 }).lean();
+
     if (duplicates.length > 0) {
       await Postcard.findByIdAndDelete(duplicates[0]._id);
     }
 
     const newPostcard = new Postcard({ ...req.body, ip: clientIp });
-    const savedPostcard = await newPostcard.save();
-    res.status(201).json(savedPostcard);
+    const saved = await newPostcard.save();
+    // Don't echo the whole base64 image / ip back to the browser.
+    res.status(201).json({ _id: saved._id, title: saved.title });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

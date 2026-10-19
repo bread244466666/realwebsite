@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- 2. Google 搜尋結果標題下方顯示的描述文字（摘要） -->
   <meta name="description" content="這是一個專為皮克敏 Bloom 玩家打造的明信片圖鑑系統，方便玩家收藏與分享各大花朵與蘑菇戰明信片。">
@@ -13,51 +12,9 @@
   <meta property="og:type" content="website">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Pikmin Bloom Postcard Gallery</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Tailwind Configuration for Custom Palette -->
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#f0f4f8',
-              100: '#d9e2ec',
-              200: '#bccadc',
-              300: '#9fb3c8',
-              400: '#829ab1',
-              500: '#627d98',
-              600: '#486581',
-              700: '#334e68',
-              800: '#243b53',
-              900: '#102a43',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <!-- Vue 3 CDN -->
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-  <style>
-    [v-cloak] { display: none; }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0.03);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(100,116,139,0.3);
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(100,116,139,0.5);
-    }
-  </style>
+  <style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.right-2\.5{right:.625rem}.right-3{right:.75rem}.top-0{top:0}.top-2\.5{top:.625rem}.top-3{top:.75rem}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:.5rem}.mt-3{margin-top:.75rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-\[4\/3\]{aspect-ratio:4/3}.h-1\.5{height:.375rem}.h-16{height:4rem}.h-4{height:1rem}.h-44{height:11rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-1\.5{width:.375rem}.w-4{width:1rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.max-w-lg{max-width:32rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:.375rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-1>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.25rem*var(--tw-space-x-reverse));margin-left:calc(.25rem*(1 - var(--tw-space-x-reverse)))}.space-x-1\.5>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.375rem*var(--tw-space-x-reverse));margin-left:calc(.375rem*(1 - var(--tw-space-x-reverse)))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.5rem*var(--tw-space-x-reverse));margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.75rem*var(--tw-space-x-reverse));margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138/var(--tw-border-opacity,1))}.border-brand-200{--tw-border-opacity:1;border-color:rgb(188 202 220/var(--tw-border-opacity,1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208/var(--tw-border-opacity,1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253/var(--tw-border-opacity,1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249/var(--tw-border-opacity,1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-black\/55{background-color:rgba(0,0,0,.55)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(240 244 248/var(--tw-bg-opacity,1))}.bg-brand-700{--tw-bg-opacity:1;background-color:rgb(51 78 104/var(--tw-bg-opacity,1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129/var(--tw-bg-opacity,1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255/var(--tw-bg-opacity,1))}.bg-sky-50\/90{background-color:rgba(240,249,255,.9)}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.bg-slate-50\/50{background-color:rgba(248,250,252,.5)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.bg-slate-800\/80{background-color:rgba(30,41,59,.8)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-slate-900\/60{background-color:rgba(15,23,42,.6)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/95{background-color:hsla(0,0%,100%,.95)}.object-contain{-o-object-fit:contain;object-fit:contain}.object-cover{-o-object-fit:cover;object-fit:cover}.p-1{padding:.25rem}.p-1\.5{padding:.375rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.text-center{text-align:center}.font-sans{font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-brand-600{--tw-text-opacity:1;color:rgb(72 101 129/var(--tw-text-opacity,1))}.text-brand-700{--tw-text-opacity:1;color:rgb(51 78 104/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-sky-800{--tw-text-opacity:1;color:rgb(7 89 133/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-25{opacity:.25}.opacity-75{opacity:.75}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px)}.backdrop-blur-md,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-200{transition-duration:.2s}.duration-300{transition-duration:.3s}[v-cloak]{display:none}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:rgba(0,0,0,.03)}::-webkit-scrollbar-thumb{background:rgba(100,116,139,.3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(100,116,139,.5)}.hover\:border-brand-500:hover{--tw-border-opacity:1;border-color:rgb(98 125 152/var(--tw-border-opacity,1))}.hover\:bg-black\/75:hover{background-color:rgba(0,0,0,.75)}.hover\:bg-brand-100:hover{--tw-bg-opacity:1;background-color:rgb(217 226 236/var(--tw-bg-opacity,1))}.hover\:bg-brand-800:hover{--tw-bg-opacity:1;background-color:rgb(36 59 83/var(--tw-bg-opacity,1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.hover\:bg-slate-100\/50:hover{background-color:rgba(241,245,249,.5)}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.hover\:text-slate-600:hover{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.hover\:shadow:hover{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.hover\:shadow-md:hover,.hover\:shadow:hover{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:opacity-50:disabled{opacity:.5}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-brand-700{--tw-text-opacity:1;color:rgb(51 78 104/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-sm{font-size:.875rem;line-height:1.25rem}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width:1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style>
+  <script defer src="assets/vue.global.prod.js"></script>
+  <script defer src="assets/app.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
   <div id="app" v-cloak class="flex-1 flex flex-col">
@@ -169,7 +126,7 @@
       <!-- Postcard Cards Grid -->
       <div v-if="filteredPostcards.length > 0 && !loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         <div 
-          v-for="item in filteredPostcards" 
+          v-for="(item, idx) in filteredPostcards" 
           :key="item._id || item.id"
           @click="openDetailsModal(item)"
           class="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col cursor-pointer"
@@ -179,6 +136,10 @@
             <img 
               :src="item.image" 
               :alt="item.title" 
+              width="400" height="300"
+              :loading="idx < 4 ? 'eager' : 'lazy'"
+              :fetchpriority="idx < 4 ? 'high' : 'auto'"
+              decoding="async"
               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               @error="handleImageError"
             />
@@ -369,7 +330,7 @@
     <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
         <div class="relative bg-slate-900 aspect-[4/3] w-full">
-          <img :src="selectedPostcard.image" :alt="selectedPostcard.title" class="w-full h-full object-contain" />
+          <img :src="selectedPostcard.image" :alt="selectedPostcard.title" decoding="async" class="w-full h-full object-contain" />
           <button 
             @click="selectedPostcard = null" 
             class="absolute top-3 right-3 bg-black/55 hover:bg-black/75 text-white p-1.5 rounded-full backdrop-blur-md transition-colors"
@@ -410,317 +371,5 @@
 
   </div>
 
-  <script>
-    const { createApp, ref, computed, onMounted } = Vue;
-
-    createApp({
-      setup() {
-        const currentLang = ref('en');
-        const postcards = ref([]);
-        const loading = ref(false);
-        const submitting = ref(false);
-        const filterType = ref('ALL');
-        const apiConnected = ref(false);
-
-        // Pagination variables
-        const pageSize = 30;
-        const hasMore = ref(true);
-        const loadingMore = ref(false);
-
-        const showUploadModal = ref(false);
-        const selectedPostcard = ref(null);
-
-        const imageInputType = ref('file');
-        const form = ref({
-          title: '',
-          sourceType: 'Flower',
-          address: '',
-          date: new Date().toISOString().split('T')[0],
-          image: '',
-          imageUrlInput: ''
-        });
-
-        const dictionary = {
-          en: {
-            appTitle: 'Pikmin Bloom',
-            appSubtitle: 'Postcard Gallery Archive',
-            addPostcardBtn: 'Add Postcard',
-            totalCount: 'Total Postcards',
-            apiLive: 'API Connected',
-            apiLocalOnly: 'Local Storage Fallback',
-            filterLabel: 'Filter Type',
-            filterAll: 'All Types',
-            typeFlower: 'Flower',
-            typeMushroom: 'Mushroom Fight',
-            refreshTooltip: 'Refresh Data',
-            emptyStateTitle: 'This collection has no data',
-            emptyStateDesc: 'There are no postcards logged yet. Click below to add your first postcard.',
-            loading: 'Loading postcards...',
-            viewDetails: 'View Details',
-            formImageLabel: 'Postcard Image',
-            uploadLocalFile: 'Local File',
-            uploadImageUrl: 'Image URL',
-            clickToChooseFile: 'Click to select image file from device',
-            urlPlaceholder: 'https://example.com/postcard.jpg',
-            livePreviewLabel: 'Live Image Preview',
-            noPreviewAvailable: 'No image selected for preview',
-            formTitleLabel: 'Title / Location Name',
-            titlePlaceholder: 'e.g. Historic Clock Tower Flower',
-            formTypeLabel: 'Source Type',
-            formAddressLabel: 'Detailed Address',
-            addressPlaceholder: 'e.g. 100 Main Street, San Francisco, CA',
-            formDateLabel: 'Obtained Date',
-            cancelBtn: 'Cancel',
-            submitBtn: 'Save Postcard',
-            closeBtn: 'Close',
-            loadMoreBtn: 'Load More Postcards',
-            loadingMoreText: 'Loading...',
-            footerText: 'Pikmin Bloom Postcard Gallery Management System'
-          },
-          zh: {
-            appTitle: '皮克敏 Bloom',
-            appSubtitle: '皮克敏明信片圖鑑與典藏',
-            addPostcardBtn: '新增明信片',
-            totalCount: '明信片總數',
-            apiLive: 'API 連線正常',
-            apiLocalOnly: '離線快取模式',
-            filterLabel: '篩選類別',
-            filterAll: '全部類別',
-            typeFlower: '大花朵 (Flower)',
-            typeMushroom: '蘑菇戰 (Mushroom Fight)',
-            refreshTooltip: '重新整理',
-            emptyStateTitle: '尚無任何明信片資料',
-            emptyStateDesc: '此集合目前沒有任何內容，請點擊下方按鈕上傳並建立第一張明信片。',
-            loading: '載入明信片資料中...',
-            viewDetails: '檢視細節',
-            formImageLabel: '明信片圖片',
-            uploadLocalFile: '本機檔案',
-            uploadImageUrl: '圖片網址 URL',
-            clickToChooseFile: '點擊選擇裝置中的圖片檔案',
-            urlPlaceholder: 'https://example.com/postcard.jpg',
-            livePreviewLabel: '實時圖片預覽 (Live Preview)',
-            noPreviewAvailable: '尚未選擇或輸入圖片',
-            formTitleLabel: '標題 / 地標名稱',
-            titlePlaceholder: '例如：中央公園巨石大花朵',
-            formTypeLabel: '來源類型',
-            formAddressLabel: '詳細地址資訊',
-            addressPlaceholder: '例如：台北市信義區信義路五段7號',
-            formDateLabel: '獲得日期',
-            cancelBtn: '取消',
-            submitBtn: '儲存明信片',
-            closeBtn: '關閉',
-            loadMoreBtn: '載入更多明信片',
-            loadingMoreText: '載入中...',
-            footerText: '皮克敏 Bloom 明信片管理與檢視系統'
-          }
-        };
-
-        const t = (key) => dictionary[currentLang.value][key] || key;
-
-        const toggleLang = () => {
-          currentLang.value = currentLang.value === 'en' ? 'zh' : 'en';
-        };
-
-        const filteredPostcards = computed(() => {
-          if (filterType.value === 'ALL') return postcards.value;
-          return postcards.value.filter(item => item.sourceType === filterType.value);
-        });
-
-        // Initial Fetch (First 30 items)
-        const fetchPostcards = async () => {
-          loading.value = true;
-          try {
-            const res = await fetch(`/api/postcards?limit=${pageSize}&skip=0`);
-            if (res.ok) {
-              const data = await res.json();
-              postcards.value = data;
-              hasMore.value = data.length === pageSize;
-              apiConnected.value = true;
-            } else {
-              throw new Error('API return non-200 status');
-            }
-          } catch (err) {
-            apiConnected.value = false;
-            const local = localStorage.getItem('pb_postcards');
-            if (local) {
-              try {
-                postcards.value = JSON.parse(local);
-              } catch (e) {
-                postcards.value = [];
-              }
-            } else {
-              postcards.value = [];
-            }
-          } finally {
-            loading.value = false;
-          }
-        };
-
-        // Load Next 30 Items
-        const loadMorePostcards = async () => {
-          if (loadingMore.value || !hasMore.value) return;
-          loadingMore.value = true;
-
-          try {
-            const skipCount = postcards.value.length;
-            const res = await fetch(`/api/postcards?limit=${pageSize}&skip=${skipCount}`);
-            if (res.ok) {
-              const data = await res.json();
-              if (data.length > 0) {
-                postcards.value.push(...data);
-              }
-              if (data.length < pageSize) {
-                hasMore.value = false;
-              }
-            }
-          } catch (err) {
-            console.error('Failed to load more postcards', err);
-          } finally {
-            loadingMore.value = false;
-          }
-        };
-
-        const openUploadModal = () => {
-          form.value = {
-            title: '',
-            sourceType: 'Flower',
-            address: '',
-            date: new Date().toISOString().split('T')[0],
-            image: '',
-            imageUrlInput: ''
-          };
-          imageInputType.value = 'file';
-          showUploadModal.value = true;
-        };
-
-        const closeUploadModal = () => {
-          showUploadModal.value = false;
-        };
-
-        // Automatic Canvas WebP Compression & Resize (Max 1200px)
-        const handleFileChange = (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement('canvas');
-              let width = img.width;
-              let height = img.height;
-
-              const MAX_WIDTH = 1200;
-              const MAX_HEIGHT = 1200;
-
-              if (width > height) {
-                if (width > MAX_WIDTH) {
-                  height = Math.round((height * MAX_WIDTH) / width);
-                  width = MAX_WIDTH;
-                }
-              } else {
-                if (height > MAX_HEIGHT) {
-                  width = Math.round((width * MAX_HEIGHT) / height);
-                  height = MAX_HEIGHT;
-                }
-              }
-
-              canvas.width = width;
-              canvas.height = height;
-
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(img, 0, 0, width, height);
-
-              const compressedDataUrl = canvas.toDataURL('image/webp', 0.8);
-              form.value.image = compressedDataUrl;
-            };
-            img.src = event.target.result;
-          };
-          reader.readAsDataURL(file);
-        };
-
-        const handleUrlInput = () => {
-          form.value.image = form.value.imageUrlInput;
-        };
-
-        const handleImageError = (e) => {
-          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
-        };
-
-        const submitPostcard = async () => {
-          if (!form.value.title || !form.value.address || !form.value.image) return;
-
-          submitting.value = true;
-
-          const payload = {
-            title: form.value.title,
-            sourceType: form.value.sourceType,
-            address: form.value.address,
-            date: form.value.date,
-            image: form.value.image
-          };
-
-          try {
-            if (apiConnected.value) {
-              const res = await fetch('/api/postcards', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-              });
-              if (res.ok) {
-                await fetchPostcards();
-              } else {
-                throw new Error('Save failed');
-              }
-            } else {
-              const newEntry = { _id: 'local_' + Date.now(), ...payload };
-              postcards.value.unshift(newEntry);
-              localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
-            }
-            closeUploadModal();
-          } catch (err) {
-            alert('儲存明信片失敗。');
-          } finally {
-            submitting.value = false;
-          }
-        };
-
-        const openDetailsModal = (item) => {
-          selectedPostcard.value = item;
-        };
-
-        onMounted(() => {
-          fetchPostcards();
-        });
-
-        return {
-          currentLang,
-          t,
-          toggleLang,
-          postcards,
-          filteredPostcards,
-          loading,
-          submitting,
-          filterType,
-          apiConnected,
-          hasMore,
-          loadingMore,
-          showUploadModal,
-          selectedPostcard,
-          imageInputType,
-          form,
-          openUploadModal,
-          closeUploadModal,
-          handleFileChange,
-          handleUrlInput,
-          handleImageError,
-          submitPostcard,
-          loadMorePostcards,
-          openDetailsModal,
-          fetchPostcards
-        };
-      }
-    }).mount('#app');
-  </script>
 </body>
 </html>
