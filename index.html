@@ -3,385 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 2. Google 搜尋結果標題下方顯示的描述文字（摘要） -->
   <meta name="description" content="這是一個專為皮克敏 Bloom 玩家打造的明信片圖鑑系統，方便玩家收藏與分享各大花朵與蘑菇戰明信片。">
-  <!-- 3. Open Graph 標籤（控制 Line, Facebook, Discord 等通訊軟體分享時顯示的內容） -->
   <meta property="og:title" content="皮克敏 Bloom 明信片圖鑑系統">
   <meta property="og:description" content="收藏與分享您的皮克敏 Bloom 明信片，記錄每一個冒險足跡。">
   <meta property="og:url" content="https://pikmin.tech">
   <meta property="og:type" content="website">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Pikmin Bloom Postcard Gallery</title>
-  <style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.right-2\.5{right:.625rem}.right-3{right:.75rem}.top-0{top:0}.top-2\.5{top:.625rem}.top-3{top:.75rem}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:.5rem}.mt-3{margin-top:.75rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-\[4\/3\]{aspect-ratio:4/3}.h-1\.5{height:.375rem}.h-16{height:4rem}.h-4{height:1rem}.h-44{height:11rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-1\.5{width:.375rem}.w-4{width:1rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.max-w-lg{max-width:32rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:.375rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-1>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.25rem*var(--tw-space-x-reverse));margin-left:calc(.25rem*(1 - var(--tw-space-x-reverse)))}.space-x-1\.5>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.375rem*var(--tw-space-x-reverse));margin-left:calc(.375rem*(1 - var(--tw-space-x-reverse)))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.5rem*var(--tw-space-x-reverse));margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.75rem*var(--tw-space-x-reverse));margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138/var(--tw-border-opacity,1))}.border-brand-200{--tw-border-opacity:1;border-color:rgb(188 202 220/var(--tw-border-opacity,1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208/var(--tw-border-opacity,1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253/var(--tw-border-opacity,1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249/var(--tw-border-opacity,1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-black\/55{background-color:rgba(0,0,0,.55)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(240 244 248/var(--tw-bg-opacity,1))}.bg-brand-700{--tw-bg-opacity:1;background-color:rgb(51 78 104/var(--tw-bg-opacity,1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129/var(--tw-bg-opacity,1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255/var(--tw-bg-opacity,1))}.bg-sky-50\/90{background-color:rgba(240,249,255,.9)}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.bg-slate-50\/50{background-color:rgba(248,250,252,.5)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.bg-slate-800\/80{background-color:rgba(30,41,59,.8)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-slate-900\/60{background-color:rgba(15,23,42,.6)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/95{background-color:hsla(0,0%,100%,.95)}.object-contain{-o-object-fit:contain;object-fit:contain}.object-cover{-o-object-fit:cover;object-fit:cover}.p-1{padding:.25rem}.p-1\.5{padding:.375rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.text-center{text-align:center}.font-sans{font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-brand-600{--tw-text-opacity:1;color:rgb(72 101 129/var(--tw-text-opacity,1))}.text-brand-700{--tw-text-opacity:1;color:rgb(51 78 104/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-sky-800{--tw-text-opacity:1;color:rgb(7 89 133/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-25{opacity:.25}.opacity-75{opacity:.75}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px)}.backdrop-blur-md,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-200{transition-duration:.2s}.duration-300{transition-duration:.3s}[v-cloak]{display:none}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:rgba(0,0,0,.03)}::-webkit-scrollbar-thumb{background:rgba(100,116,139,.3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(100,116,139,.5)}.hover\:border-brand-500:hover{--tw-border-opacity:1;border-color:rgb(98 125 152/var(--tw-border-opacity,1))}.hover\:bg-black\/75:hover{background-color:rgba(0,0,0,.75)}.hover\:bg-brand-100:hover{--tw-bg-opacity:1;background-color:rgb(217 226 236/var(--tw-bg-opacity,1))}.hover\:bg-brand-800:hover{--tw-bg-opacity:1;background-color:rgb(36 59 83/var(--tw-bg-opacity,1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.hover\:bg-slate-100\/50:hover{background-color:rgba(241,245,249,.5)}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.hover\:text-slate-600:hover{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.hover\:shadow:hover{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.hover\:shadow-md:hover,.hover\:shadow:hover{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:opacity-50:disabled{opacity:.5}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-brand-700{--tw-text-opacity:1;color:rgb(51 78 104/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-sm{font-size:.875rem;line-height:1.25rem}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width:1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style>
-  <script defer src="assets/vue.global.prod.js"></script>
-  <script defer src="assets/app.js"></script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-G4YXL9XEJ0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-G4YXL9XEJ0');
-</script>
-</form> 
-</p>
-<script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+  <style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.right-2\.5{right:.625rem}.right-3{right:.75rem}.top-0{top:0}.top-2\.5{top:.625rem}.top-3{top:.75rem}.z-30{z-index:30}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-1{margin-bottom:.25rem}.mb-1\.5{margin-bottom:.375rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.ml-2{margin-left:.5rem}.mt-3{margin-top:.75rem}.mt-8{margin-top:2rem}.mt-auto{margin-top:auto}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-\[4\/3\]{aspect-ratio:4/3}.h-1\.5{height:.375rem}.h-16{height:4rem}.h-4{height:1rem}.h-44{height:11rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-full{height:100%}.min-h-screen{min-height:100vh}.w-1\.5{width:.375rem}.w-4{width:1rem}.w-8{width:2rem}.w-9{width:2.25rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}.max-w-lg{max-width:32rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}@keyframes spin{to{transform:rotate(1turn)}}.animate-spin{animation:spin 1s linear infinite}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.flex-col{flex-direction:column}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:.375rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-x-1>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.25rem*var(--tw-space-x-reverse));margin-left:calc(.25rem*(1 - var(--tw-space-x-reverse)))}.space-x-1\.5>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.375rem*var(--tw-space-x-reverse));margin-left:calc(.375rem*(1 - var(--tw-space-x-reverse)))}.space-x-2>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.5rem*var(--tw-space-x-reverse));margin-left:calc(.5rem*(1 - var(--tw-space-x-reverse)))}.space-x-3>:not([hidden])~:not([hidden]){--tw-space-x-reverse:0;margin-right:calc(.75rem*var(--tw-space-x-reverse));margin-left:calc(.75rem*(1 - var(--tw-space-x-reverse)))}.space-y-3>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(.75rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(.75rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded{border-radius:.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-200{--tw-border-opacity:1;border-color:rgb(253 230 138/var(--tw-border-opacity,1))}.border-brand-200{--tw-border-opacity:1;border-color:rgb(188 202 220/var(--tw-border-opacity,1))}.border-emerald-200{--tw-border-opacity:1;border-color:rgb(167 243 208/var(--tw-border-opacity,1))}.border-sky-200{--tw-border-opacity:1;border-color:rgb(186 230 253/var(--tw-border-opacity,1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249/var(--tw-border-opacity,1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240/var(--tw-border-opacity,1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225/var(--tw-border-opacity,1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85/var(--tw-border-opacity,1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59/var(--tw-border-opacity,1))}.bg-amber-50{--tw-bg-opacity:1;background-color:rgb(255 251 235/var(--tw-bg-opacity,1))}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11/var(--tw-bg-opacity,1))}.bg-black\/55{background-color:rgba(0,0,0,.55)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(240 244 248/var(--tw-bg-opacity,1))}.bg-brand-700{--tw-bg-opacity:1;background-color:rgb(51 78 104/var(--tw-bg-opacity,1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245/var(--tw-bg-opacity,1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129/var(--tw-bg-opacity,1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255/var(--tw-bg-opacity,1))}.bg-sky-50\/95{background-color:rgba(240,249,255,.95)}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252/var(--tw-bg-opacity,1))}.bg-slate-50\/50{background-color:rgba(248,250,252,.5)}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59/var(--tw-bg-opacity,1))}.bg-slate-800\/95{background-color:rgba(30,41,59,.95)}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42/var(--tw-bg-opacity,1))}.bg-slate-900\/60{background-color:rgba(15,23,42,.6)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255/var(--tw-bg-opacity,1))}.bg-white\/95{background-color:hsla(0,0%,100%,.95)}.object-contain{-o-object-fit:contain;object-fit:contain}.object-cover{-o-object-fit:cover;object-fit:cover}.p-1{padding:.25rem}.p-1\.5{padding:.375rem}.p-2\.5{padding:.625rem}.p-3{padding:.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:.5rem;padding-right:.5rem}.px-2\.5{padding-left:.625rem;padding-right:.625rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-3\.5{padding-left:.875rem;padding-right:.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-4{padding-bottom:1rem}.pb-6{padding-bottom:1.5rem}.pt-2{padding-top:.5rem}.pt-3{padding-top:.75rem}.text-center{text-align:center}.font-sans{font-family:ui-sans-serif,system-ui,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.leading-none{line-height:1}.tracking-tight{letter-spacing:-.025em}.tracking-wider{letter-spacing:.05em}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9/var(--tw-text-opacity,1))}.text-brand-600{--tw-text-opacity:1;color:rgb(72 101 129/var(--tw-text-opacity,1))}.text-brand-700{--tw-text-opacity:1;color:rgb(51 78 104/var(--tw-text-opacity,1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87/var(--tw-text-opacity,1))}.text-sky-800{--tw-text-opacity:1;color:rgb(7 89 133/var(--tw-text-opacity,1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249/var(--tw-text-opacity,1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139/var(--tw-text-opacity,1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105/var(--tw-text-opacity,1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42/var(--tw-text-opacity,1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity,1))}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.opacity-25{opacity:.25}.opacity-75{opacity:.75}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgba(0,0,0,.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color)}.shadow-2xl,.shadow-sm{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgba(0,0,0,.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px)}.backdrop-blur-md,.backdrop-blur-sm{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px)}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-200{transition-duration:.2s}.duration-300{transition-duration:.3s}[v-cloak]{display:none}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:rgba(0,0,0,.03)}::-webkit-scrollbar-thumb{background:rgba(100,116,139,.3);border-radius:3px}::-webkit-scrollbar-thumb:hover{background:rgba(100,116,139,.5)}.hover\:border-brand-500:hover{--tw-border-opacity:1;border-color:rgb(98 125 152/var(--tw-border-opacity,1))}.hover\:bg-black\/75:hover{background-color:rgba(0,0,0,.75)}.hover\:bg-brand-100:hover{--tw-bg-opacity:1;background-color:rgb(217 226 236/var(--tw-bg-opacity,1))}.hover\:bg-brand-800:hover{--tw-bg-opacity:1;background-color:rgb(36 59 83/var(--tw-bg-opacity,1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249/var(--tw-bg-opacity,1))}.hover\:bg-slate-100\/50:hover{background-color:rgba(241,245,249,.5)}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240/var(--tw-bg-opacity,1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85/var(--tw-text-opacity,1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59/var(--tw-text-opacity,1))}.hover\:underline:hover{text-decoration-line:underline}.hover\:shadow:hover{--tw-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px -1px rgba(0,0,0,.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color),0 1px 2px -1px var(--tw-shadow-color)}.hover\:shadow-md:hover,.hover\:shadow:hover{box-shadow:var(--tw-ring-offset-shadow,0 0 #0000),var(--tw-ring-shadow,0 0 #0000),var(--tw-shadow)}.hover\:shadow-md:hover{--tw-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -2px rgba(0,0,0,.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color),0 2px 4px -2px var(--tw-shadow-color)}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.disabled\:opacity-50:disabled{opacity:.5}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:text-brand-700{--tw-text-opacity:1;color:rgb(51 78 104/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-sm{font-size:.875rem;line-height:1.25rem}}@media (min-width:768px){.md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width:1024px){.lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.lg\:px-8{padding-left:2rem;padding-right:2rem}}</style>
+  <!-- Start the API request right away (in parallel with the JS download) and
+       preload the first images as soon as their addresses are known. -->
+  <script>
+  (function () {
+    try {
+      var p = fetch('/api/postcards?limit=30&skip=0').then(function (r) {
+        if (!r.ok) throw 0;
+        return r.json();
+      });
+      p.then(function (d) {
+        d.slice(0, 4).forEach(function (c, i) {
+          var u = c.thumb || c.image;
+          if (!u) return;
+          var l = document.createElement('link');
+          l.rel = 'preload'; l.as = 'image'; l.href = u;
+          if (i === 0) l.fetchPriority = 'high';
+          document.head.appendChild(l);
+        });
+      }).catch(function () {});
+      window.__pcPromise = p;
+    } catch (e) {}
+  })();
+  </script>
+  <script type="module" src="assets/app.d21c3e4d.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans">
-  <div id="app" v-cloak class="flex-1 flex flex-col">
-
-    <!-- Header / Navbar -->
-    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        
-        <!-- Brand Title -->
-        <div class="flex items-center space-x-3">
-  <!-- Icon Container -->
-  <div class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold shadow-sm overflow-hidden p-1">
-    
-    <!-- Geo-Sprout Pin SVG -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full">
-      <path d="M32 14 C22 14 14 22 14 32 C14 44 32 56 32 56 C32 56 50 44 50 32 C50 22 42 14 32 14 Z" fill="#1E293B" stroke="#38BDF8" stroke-width="3"/>
-      <circle cx="32" cy="32" r="5" fill="#38BDF8"/>
-      <path d="M32 14 C26 6 20 8 24 2 C32 4 34 10 32 14 Z" fill="#4ADE80"/>
-      <path d="M32 14 C38 6 44 8 40 2 C32 4 30 10 32 14 Z" fill="#22C55E"/>
-    </svg>
-
+  <div id="app" class="flex-1 flex flex-col">
+    <!-- placeholder with the same height as the real header; replaced when the app starts -->
+    <div class="h-16 bg-white border-b border-slate-200"></div>
   </div>
-
-  <!-- Text Section -->
-  <div>
-    <h1 class="text-lg font-bold text-slate-900 tracking-tight leading-none">{{ t('appTitle') }}</h1>
-    <span class="text-xs text-slate-500 font-medium">{{ t('appSubtitle') }}</span>
-  </div>
-</div>
-
-        <!-- Right Controls -->
-        <div class="flex items-center space-x-3">
-          <!-- Language Toggle -->
-          <button 
-            @click="toggleLang" 
-            class="flex items-center space-x-1 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-lg transition-colors border border-brand-200"
-          >
-            <span>{{ currentLang === 'en' ? '繁體中文' : 'English' }}</span>
-          </button>
-
-          <!-- Add Postcard Primary Action -->
-          <button 
-            @click="openUploadModal" 
-            class="flex items-center space-x-1.5 bg-brand-700 hover:bg-brand-800 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg shadow-sm hover:shadow transition-all"
-          >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            <span>{{ t('addPostcardBtn') }}</span>
-          </button>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
-      
-      <!-- Toolbar & Status Bar -->
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
-        <div class="flex items-center space-x-2">
-          <span class="text-sm font-semibold text-slate-700">{{ t('totalCount') }}:</span>
-          <span class="bg-slate-200 text-slate-700 text-xs font-bold px-2.5 py-0.5 rounded-full">{{ postcards.length }}</span>
-          
-          <!-- Live API Indicator status -->
-          <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full border ml-2" :class="apiConnected ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'">
-            <span class="w-1.5 h-1.5 rounded-full" :class="apiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'"></span>
-            {{ apiConnected ? t('apiLive') : t('apiLocalOnly') }}
-          </span>
-        </div>
-
-        <!-- Filter Controls -->
-        <div class="flex items-center space-x-2">
-          <label class="text-xs font-medium text-slate-500">{{ t('filterLabel') }}:</label>
-          <select v-model="filterType" class="text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none">
-            <option value="ALL">{{ t('filterAll') }}</option>
-            <option value="Flower">{{ t('typeFlower') }}</option>
-            <option value="Mushroom Fight">{{ t('typeMushroom') }}</option>
-          </select>
-
-          <!-- Refresh Button -->
-          <button @click="fetchPostcards" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors" :title="t('refreshTooltip')">
-            <svg class="w-4 h-4" :class="{'animate-spin': loading}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <!-- Zero Data / Empty State -->
-      <div v-if="filteredPostcards.length === 0 && !loading" class="flex-1 flex flex-col items-center justify-center py-16 px-4 text-center">
-        <h3 class="text-base font-semibold text-slate-800 mb-1">{{ t('emptyStateTitle') }}</h3>
-        <p class="text-xs text-slate-500 max-w-sm mb-6">{{ t('emptyStateDesc') }}</p>
-        <button @click="openUploadModal" class="bg-brand-700 hover:bg-brand-800 text-white text-xs font-medium px-4 py-2.5 rounded-lg shadow-sm">
-          {{ t('addPostcardBtn') }}
-        </button>
-      </div>
-
-      <!-- Loading State -->
-      <div v-if="loading" class="flex-1 flex items-center justify-center py-16">
-        <div class="flex flex-col items-center space-y-3">
-          <svg class="w-8 h-8 text-brand-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-          <span class="text-xs font-medium text-slate-500">{{ t('loading') }}</span>
-        </div>
-      </div>
-
-      <!-- Postcard Cards Grid -->
-      <div v-if="filteredPostcards.length > 0 && !loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <div 
-          v-for="(item, idx) in filteredPostcards" 
-          :key="item._id || item.id"
-          @click="openDetailsModal(item)"
-          class="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col cursor-pointer"
-        >
-          <!-- Image Container -->
-          <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden border-b border-slate-100">
-            <img 
-              :src="item.image" 
-              :alt="item.title" 
-              width="400" height="300"
-              :loading="idx < 4 ? 'eager' : 'lazy'"
-              :fetchpriority="idx < 4 ? 'high' : 'auto'"
-              decoding="async"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              @error="handleImageError"
-            />
-            
-            <!-- Type Badge Overlay -->
-            <span 
-              class="absolute top-2.5 right-2.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm border backdrop-blur-md"
-              :class="item.sourceType === 'Flower' ? 'bg-sky-50/90 text-sky-800 border-sky-200' : 'bg-slate-800/80 text-slate-100 border-slate-700'"
-            >
-              {{ item.sourceType === 'Flower' ? t('typeFlower') : t('typeMushroom') }}
-            </span>
-          </div>
-
-          <!-- Postcard Info -->
-          <div class="p-4 flex-1 flex flex-col justify-between">
-            <div>
-              <h3 class="font-bold text-slate-900 text-sm mb-1 truncate group-hover:text-brand-700 transition-colors">
-                {{ item.title }}
-              </h3>
-              <p class="text-xs text-slate-500 flex items-center mb-3 truncate">
-                <span class="truncate">{{ item.address }}</span>
-              </p>
-            </div>
-
-            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-              <span>{{ item.date }}</span>
-              <span class="text-brand-600 font-medium hover:underline">{{ t('viewDetails') }} &rarr;</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Load More Button -->
-      <div v-if="hasMore && filterType === 'ALL' && postcards.length > 0 && !loading" class="mt-8 text-center pb-6">
-        <button 
-          @click="loadMorePostcards" 
-          :disabled="loadingMore"
-          class="px-6 py-2.5 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-sm transition-all disabled:opacity-50"
-        >
-          {{ loadingMore ? t('loadingMoreText') : t('loadMoreBtn') }}
-        </button>
-      </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
-        {{ t('footerText') }}
-      </div>
-    </footer>
-
-    <!-- MODAL 1: ADD POSTCARD MODAL -->
-    <div v-if="showUploadModal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
-        
-        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-          <h3 class="text-base font-bold text-slate-900">{{ t('addPostcardBtn') }}</h3>
-          <button @click="closeUploadModal" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">X</button>
-        </div>
-
-        <form @submit.prevent="submitPostcard" class="p-6 space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1.5">{{ t('formImageLabel') }} *</label>
-            <div class="flex space-x-2 mb-2">
-              <button 
-                type="button" 
-                @click="imageInputType = 'file'" 
-                class="text-xs px-2.5 py-1 rounded-md font-medium border transition-colors"
-                :class="imageInputType === 'file' ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'"
-              >
-                {{ t('uploadLocalFile') }}
-              </button>
-              <button 
-                type="button" 
-                @click="imageInputType = 'url'" 
-                class="text-xs px-2.5 py-1 rounded-md font-medium border transition-colors"
-                :class="imageInputType === 'url' ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'"
-              >
-                {{ t('uploadImageUrl') }}
-              </button>
-            </div>
-
-            <div v-if="imageInputType === 'file'">
-              <input 
-                type="file" 
-                ref="fileInput"
-                accept="image/png, image/jpeg, image/jpg, image/webp" 
-                @change="handleFileChange"
-                class="hidden" 
-                id="file-upload"
-              />
-              <label 
-                for="file-upload" 
-                class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100/50 transition-colors text-center"
-              >
-                <span class="text-xs font-medium text-slate-600">{{ t('clickToChooseFile') }}</span>
-              </label>
-            </div>
-
-            <div v-else>
-              <input 
-                type="url" 
-                v-model="form.imageUrlInput" 
-                @input="handleUrlInput" 
-                :placeholder="t('urlPlaceholder')" 
-                class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
-              />
-            </div>
-
-            <div class="mt-3">
-              <div class="relative w-full h-44 bg-slate-100 border border-slate-200 rounded-lg overflow-hidden flex items-center justify-center">
-                <img 
-                  v-if="form.image" 
-                  :src="form.image" 
-                  class="w-full h-full object-cover" 
-                  alt="Live Preview" 
-                />
-                <span v-else class="text-xs text-slate-400">{{ t('noPreviewAvailable') }}</span>
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formTitleLabel') }} *</label>
-            <input 
-              type="text" 
-              v-model="form.title" 
-              required 
-              :placeholder="t('titlePlaceholder')" 
-              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formTypeLabel') }} *</label>
-            <select 
-              v-model="form.sourceType" 
-              required 
-              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
-            >
-              <option value="Flower">{{ t('typeFlower') }}</option>
-              <option value="Mushroom Fight">{{ t('typeMushroom') }}</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formAddressLabel') }} *</label>
-            <input 
-              type="text" 
-              v-model="form.address" 
-              required 
-              :placeholder="t('addressPlaceholder')" 
-              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formDateLabel') }} *</label>
-            <input 
-              type="date" 
-              v-model="form.date" 
-              required 
-              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
-            />
-          </div>
-
-          <div class="pt-3 flex items-center justify-end space-x-2 border-t border-slate-200">
-            <button 
-              type="button" 
-              @click="closeUploadModal" 
-              class="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800 rounded-lg"
-            >
-              {{ t('cancelBtn') }}
-            </button>
-            <button 
-              type="submit" 
-              :disabled="submitting || !form.image"
-              class="px-4 py-2 bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white text-xs font-medium rounded-lg shadow-sm transition-all"
-            >
-              <span>{{ t('submitBtn') }}</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- MODAL 2: CARD DETAILS VIEW -->
-    <div v-if="selectedPostcard" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
-        <div class="relative bg-slate-900 aspect-[4/3] w-full">
-          <img :src="selectedPostcard.image" :alt="selectedPostcard.title" decoding="async" class="w-full h-full object-contain" />
-          <button 
-            @click="selectedPostcard = null" 
-            class="absolute top-3 right-3 bg-black/55 hover:bg-black/75 text-white p-1.5 rounded-full backdrop-blur-md transition-colors"
-          >
-            X
-          </button>
-        </div>
-
-        <div class="p-6">
-          <div class="flex items-center justify-between mb-2">
-            <span 
-              class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border"
-              :class="selectedPostcard.sourceType === 'Flower' ? 'bg-sky-50 text-sky-800 border-sky-200' : 'bg-slate-100 text-slate-800 border-slate-300'"
-            >
-              {{ selectedPostcard.sourceType === 'Flower' ? t('typeFlower') : t('typeMushroom') }}
-            </span>
-            <span class="text-xs text-slate-400">{{ selectedPostcard.date }}</span>
-          </div>
-
-          <h2 class="text-xl font-bold text-slate-900 mb-2">{{ selectedPostcard.title }}</h2>
-          
-          <div class="flex items-start text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4">
-            <span>{{ selectedPostcard.address }}</span>
-          </div>
-
-          <!-- Close Button -->
-          <div class="flex justify-end">
-            <button 
-              @click="selectedPostcard = null" 
-              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors"
-            >
-              {{ t('closeBtn') }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
 </body>
 </html>

@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+[v-cloak]{display:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:rgba(0,0,0,.03)}
+::-webkit-scrollbar-thumb{background:rgba(100,116,139,.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(100,116,139,.5)}

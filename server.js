@@ -3,9 +3,13 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-// Optional: `npm i compression` to gzip/brotli-free JSON responses. Server still runs without it.
+// Optional packages (the server still runs without them):
+//   npm i compression   -> compresses API responses
+//   npm i sharp         -> lets the server create small thumbnails for older postcards
 let compression = null;
 try { compression = require('compression'); } catch (e) { /* not installed */ }
+let sharp = null;
+try { sharp = require('sharp'); } catch (e) { /* not installed */ }
 
 const app = express();
 app.set('trust proxy', true);
@@ -30,18 +34,20 @@ const postcardSchema = new mongoose.Schema({
   address: { type: String, required: true },
   date: { type: String, required: true },
   image: { type: String, required: true },
+  thumb: { type: String },            // small (480px) version used by the grid cards
   ip: { type: String }
 }, { collection: 'bread' });
 
 const Postcard = mongoose.model('Postcard', postcardSchema);
 
 const MAX_LIMIT = 100;
+const DATA_URL = /^data:(image\/[\w.+-]+);base64,(.*)$/s;
+const YEAR = 'public, max-age=31536000, immutable';
 
 // List postcards.
-// Performance: images are stored as base64 data URLs inside MongoDB. Sending them inside the
-// list JSON makes the response huge and uncacheable. Here the database strips them out and the
-// browser fetches each one from /api/postcards/:id/image instead (cacheable, lazy-loadable).
-// Privacy: the `ip` field is no longer sent to visitors.
+// Images live in MongoDB as base64 text. Instead of putting them in this JSON (huge, uncacheable),
+// each card gets two small links:  thumb = grid picture,  image = full picture for the details view.
+// The `ip` field is no longer sent to visitors.
 app.get('/api/postcards', async (req, res) => {
   try {
     const limit = Math.min(Math.max(parseInt(req.query.limit) || 30, 1), MAX_LIMIT);
@@ -54,45 +60,79 @@ app.get('/api/postcards', async (req, res) => {
       {
         $project: {
           title: 1, sourceType: 1, address: 1, date: 1,
-          // null when the image is a data: URL (served separately); real URLs pass through
-          image: {
-            $cond: [{ $eq: [{ $substrBytes: ['$image', 0, 5] }, 'data:'] }, null, '$image']
-          }
+          isData: { $eq: [{ $substrBytes: ['$image', 0, 5] }, 'data:'] },
+          // keep the big base64 text inside the database; only real http(s) addresses come out
+          url: { $cond: [{ $eq: [{ $substrBytes: ['$image', 0, 5] }, 'data:'] }, null, '$image'] }
         }
       }
     ]);
 
-    res.json(docs.map((d) => ({
-      ...d,
-      image: d.image || `/api/postcards/${d._id}/image`
-    })));
+    res.json(docs.map((d) => {
+      const out = { _id: d._id, title: d.title, sourceType: d.sourceType, address: d.address, date: d.date };
+      if (d.isData) {
+        out.image = `/api/postcards/${d._id}/image`;
+        out.thumb = `/api/postcards/${d._id}/thumb`;
+      } else {
+        out.image = d.url; // an external image address: use it as is
+      }
+      return out;
+    }));
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Serve one stored image as a real image file with long-lived caching.
+function sendDataUrl(res, dataUrl, cache) {
+  const m = DATA_URL.exec(dataUrl || '');
+  if (!m) return false;
+  res.set({ 'Content-Type': m[1], 'Cache-Control': cache });
+  res.send(Buffer.from(m[2], 'base64'));
+  return true;
+}
+
+// Full-size picture
 app.get('/api/postcards/:id/image', async (req, res) => {
   try {
     if (!mongoose.isValidObjectId(req.params.id)) return res.sendStatus(404);
     const doc = await Postcard.findById(req.params.id).select('image').lean();
     if (!doc || !doc.image) return res.sendStatus(404);
-
-    const m = /^data:(image\/[\w.+-]+);base64,(.*)$/s.exec(doc.image);
-    if (!m) return res.redirect(doc.image); // plain URL stored instead of data URL
-
-    res.set({
-      'Content-Type': m[1],
-      // An image never changes for a given id, so browsers/CDNs can keep it for a year.
-      'Cache-Control': 'public, max-age=31536000, immutable'
-    });
-    res.send(Buffer.from(m[2], 'base64'));
+    if (!sendDataUrl(res, doc.image, YEAR)) return res.redirect(doc.image);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// Add a postcard (unchanged behaviour: replaces an older duplicate with same title + address).
+// Small picture for the grid. Older postcards have no thumbnail yet: if `sharp` is installed it is
+// made on the first request and saved, otherwise the full picture is sent (short cache so it can
+// be replaced later).
+app.get('/api/postcards/:id/thumb', async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) return res.sendStatus(404);
+    const doc = await Postcard.findById(req.params.id).select('image thumb').lean();
+    if (!doc || !doc.image) return res.sendStatus(404);
+
+    if (doc.thumb && sendDataUrl(res, doc.thumb, YEAR)) return;
+
+    const m = DATA_URL.exec(doc.image);
+    if (!m) return res.redirect(doc.image);
+
+    if (sharp) {
+      try {
+        const buf = await sharp(Buffer.from(m[2], 'base64'))
+          .rotate().resize({ width: 480, height: 480, fit: 'inside', withoutEnlargement: true })
+          .webp({ quality: 72 }).toBuffer();
+        const thumb = 'data:image/webp;base64,' + buf.toString('base64');
+        await Postcard.updateOne({ _id: req.params.id }, { $set: { thumb } });
+        return sendDataUrl(res, thumb, YEAR);
+      } catch (e) { /* fall through to the full picture */ }
+    }
+    sendDataUrl(res, doc.image, 'public, max-age=3600');
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Add a postcard (same behaviour as before: replaces an older duplicate with the same title + address).
 app.post('/api/postcards', async (req, res) => {
   try {
     const clientIp = req.headers['cf-connecting-ip'] ||
@@ -109,7 +149,6 @@ app.post('/api/postcards', async (req, res) => {
 
     const newPostcard = new Postcard({ ...req.body, ip: clientIp });
     const saved = await newPostcard.save();
-    // Don't echo the whole base64 image / ip back to the browser.
     res.status(201).json({ _id: saved._id, title: saved.title });
   } catch (err) {
     res.status(400).json({ error: err.message });

@@ -1,0 +1,358 @@
+    <!-- Header / Navbar -->
+    <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        
+        <!-- Brand Title -->
+        <div class="flex items-center space-x-3">
+  <!-- Icon Container -->
+  <div class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-bold shadow-sm overflow-hidden p-1">
+    
+    <!-- Geo-Sprout Pin SVG -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-full h-full">
+      <path d="M32 14 C22 14 14 22 14 32 C14 44 32 56 32 56 C32 56 50 44 50 32 C50 22 42 14 32 14 Z" fill="#1E293B" stroke="#38BDF8" stroke-width="3"/>
+      <circle cx="32" cy="32" r="5" fill="#38BDF8"/>
+      <path d="M32 14 C26 6 20 8 24 2 C32 4 34 10 32 14 Z" fill="#4ADE80"/>
+      <path d="M32 14 C38 6 44 8 40 2 C32 4 30 10 32 14 Z" fill="#22C55E"/>
+    </svg>
+
+  </div>
+
+  <!-- Text Section -->
+  <div>
+    <h1 class="text-lg font-bold text-slate-900 tracking-tight leading-none">{{ t('appTitle') }}</h1>
+    <span class="text-xs text-slate-500 font-medium">{{ t('appSubtitle') }}</span>
+  </div>
+</div>
+
+        <!-- Right Controls -->
+        <div class="flex items-center space-x-3">
+          <!-- Language Toggle -->
+          <button 
+            @click="toggleLang" 
+            class="flex items-center space-x-1 text-xs font-semibold text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-lg transition-colors border border-brand-200"
+          >
+            <span>{{ currentLang === 'en' ? '繁體中文' : 'English' }}</span>
+          </button>
+
+          <!-- Add Postcard Primary Action -->
+          <button 
+            @click="openUploadModal" 
+            class="flex items-center space-x-1.5 bg-brand-700 hover:bg-brand-800 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg shadow-sm hover:shadow transition-all"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            <span>{{ t('addPostcardBtn') }}</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+      
+      <!-- Toolbar & Status Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 pb-4 border-b border-slate-200">
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-semibold text-slate-700">{{ t('totalCount') }}:</span>
+          <span class="bg-slate-200 text-slate-700 text-xs font-bold px-2.5 py-0.5 rounded-full">{{ postcards.length }}</span>
+          
+          <!-- Live API Indicator status -->
+          <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-0.5 rounded-full border ml-2" :class="apiConnected ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'">
+            <span class="w-1.5 h-1.5 rounded-full" :class="apiConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'"></span>
+            {{ apiConnected ? t('apiLive') : t('apiLocalOnly') }}
+          </span>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="flex items-center space-x-2">
+          <label for="filter-type" class="text-xs font-medium text-slate-600">{{ t('filterLabel') }}:</label>
+          <select id="filter-type" v-model="filterType" class="text-xs bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none">
+            <option value="ALL">{{ t('filterAll') }}</option>
+            <option value="Flower">{{ t('typeFlower') }}</option>
+            <option value="Mushroom Fight">{{ t('typeMushroom') }}</option>
+          </select>
+
+          <!-- Refresh Button -->
+          <button @click="fetchPostcards" class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors" :title="t('refreshTooltip')" :aria-label="t('refreshTooltip')">
+            <svg class="w-4 h-4" :class="{'animate-spin': loading}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Zero Data / Empty State -->
+      <div v-if="filteredPostcards.length === 0 && !loading" class="flex-1 flex flex-col items-center justify-center py-16 px-4 text-center">
+        <h2 class="text-base font-semibold text-slate-800 mb-1">{{ t('emptyStateTitle') }}</h2>
+        <p class="text-xs text-slate-500 max-w-sm mb-6">{{ t('emptyStateDesc') }}</p>
+        <button @click="openUploadModal" class="bg-brand-700 hover:bg-brand-800 text-white text-xs font-medium px-4 py-2.5 rounded-lg shadow-sm">
+          {{ t('addPostcardBtn') }}
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="loading" class="flex-1 flex items-center justify-center py-16">
+        <div class="flex flex-col items-center space-y-3">
+          <svg class="w-8 h-8 text-brand-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-xs font-medium text-slate-500">{{ t('loading') }}</span>
+        </div>
+      </div>
+
+      <!-- Postcard Cards Grid -->
+      <div v-if="filteredPostcards.length > 0 && !loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div 
+          v-for="(item, idx) in filteredPostcards" 
+          :key="item._id || item.id"
+          @click="openDetailsModal(item)"
+          role="button" tabindex="0" @keydown.enter="openDetailsModal(item)"
+          class="group bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden flex flex-col cursor-pointer"
+        >
+          <!-- Image Container -->
+          <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden border-b border-slate-100">
+            <img 
+              :src="item.thumb || item.image" 
+              :alt="item.title" 
+              width="400" height="300"
+              :loading="idx < 4 ? 'eager' : 'lazy'"
+              :fetchpriority="idx < 4 ? 'high' : 'auto'"
+              decoding="async"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              @error="handleImageError"
+            />
+            
+            <!-- Type Badge Overlay -->
+            <span 
+              class="absolute top-2.5 right-2.5 text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded shadow-sm border backdrop-blur-md"
+              :class="item.sourceType === 'Flower' ? 'bg-sky-50/95 text-sky-800 border-sky-200' : 'bg-slate-800/95 text-slate-100 border-slate-700'"
+            >
+              {{ item.sourceType === 'Flower' ? t('typeFlower') : t('typeMushroom') }}
+            </span>
+          </div>
+
+          <!-- Postcard Info -->
+          <div class="p-4 flex-1 flex flex-col justify-between">
+            <div>
+              <h2 class="font-bold text-slate-900 text-sm mb-1 truncate group-hover:text-brand-700 transition-colors">
+                {{ item.title }}
+              </h2>
+              <p class="text-xs text-slate-500 flex items-center mb-3 truncate">
+                <span class="truncate">{{ item.address }}</span>
+              </p>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600">
+              <span>{{ item.date }}</span>
+              <span class="text-brand-600 font-medium hover:underline">{{ t('viewDetails') }} &rarr;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More Button -->
+      <div v-if="hasMore && filterType === 'ALL' && postcards.length > 0 && !loading" class="mt-8 text-center pb-6">
+        <button 
+          @click="loadMorePostcards" 
+          :disabled="loadingMore"
+          class="px-6 py-2.5 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-xl border border-slate-200 shadow-sm transition-all disabled:opacity-50"
+        >
+          {{ loadingMore ? t('loadingMoreText') : t('loadMoreBtn') }}
+        </button>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-4 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-600">
+        {{ t('footerText') }}
+      </div>
+    </footer>
+
+    <!-- MODAL 1: ADD POSTCARD MODAL -->
+    <div v-if="showUploadModal" role="dialog" aria-modal="true" aria-labelledby="upload-title" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
+        
+        <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <h2 id="upload-title" class="text-base font-bold text-slate-900">{{ t('addPostcardBtn') }}</h2>
+          <button @click="closeUploadModal" :aria-label="t('closeBtn')" class="text-slate-600 hover:text-slate-800 p-1 rounded-lg">X</button>
+        </div>
+
+        <form @submit.prevent="submitPostcard" class="p-6 space-y-4">
+          <div>
+            <p class="block text-xs font-semibold text-slate-700 mb-1.5">{{ t('formImageLabel') }} *</p>
+            <div class="flex space-x-2 mb-2">
+              <button 
+                type="button" 
+                @click="imageInputType = 'file'" 
+                class="text-xs px-2.5 py-1 rounded-md font-medium border transition-colors"
+                :class="imageInputType === 'file' ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'"
+              >
+                {{ t('uploadLocalFile') }}
+              </button>
+              <button 
+                type="button" 
+                @click="imageInputType = 'url'" 
+                class="text-xs px-2.5 py-1 rounded-md font-medium border transition-colors"
+                :class="imageInputType === 'url' ? 'bg-slate-800 text-white border-slate-800' : 'bg-slate-100 text-slate-600 border-slate-200'"
+              >
+                {{ t('uploadImageUrl') }}
+              </button>
+            </div>
+
+            <div v-if="imageInputType === 'file'">
+              <input 
+                type="file" 
+                ref="fileInput"
+                accept="image/png, image/jpeg, image/jpg, image/webp" 
+                @change="handleFileChange"
+                class="hidden" 
+                id="file-upload"
+              />
+              <label 
+                for="file-upload" 
+                class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-xl cursor-pointer bg-slate-50 hover:bg-slate-100/50 transition-colors text-center"
+              >
+                <span class="text-xs font-medium text-slate-600">{{ t('clickToChooseFile') }}</span>
+              </label>
+            </div>
+
+            <div v-else>
+              <input 
+                type="url"
+                id="f-url" :aria-label="t('formImageLabel')" 
+                v-model="form.imageUrlInput" 
+                @input="handleUrlInput" 
+                :placeholder="t('urlPlaceholder')" 
+                class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
+              />
+            </div>
+
+            <div class="mt-3">
+              <div class="relative w-full h-44 bg-slate-100 border border-slate-200 rounded-lg overflow-hidden flex items-center justify-center">
+                <img 
+                  v-if="form.image" 
+                  :src="form.image" 
+                  class="w-full h-full object-cover" 
+                  alt="Live Preview" 
+                />
+                <span v-else class="text-xs text-slate-600">{{ t('noPreviewAvailable') }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="f-title" class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formTitleLabel') }} *</label>
+            <input 
+              type="text" 
+              v-model="form.title"
+              id="f-title" 
+              required 
+              :placeholder="t('titlePlaceholder')" 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label for="f-type" class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formTypeLabel') }} *</label>
+            <select 
+              v-model="form.sourceType"
+              id="f-type" 
+              required 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
+            >
+              <option value="Flower">{{ t('typeFlower') }}</option>
+              <option value="Mushroom Fight">{{ t('typeMushroom') }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="f-address" class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formAddressLabel') }} *</label>
+            <input 
+              type="text" 
+              v-model="form.address"
+              id="f-address" 
+              required 
+              :placeholder="t('addressPlaceholder')" 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label for="f-date" class="block text-xs font-semibold text-slate-700 mb-1">{{ t('formDateLabel') }} *</label>
+            <input 
+              type="date" 
+              v-model="form.date"
+              id="f-date" 
+              required 
+              class="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-slate-800 focus:outline-none"
+            />
+          </div>
+
+          <div class="pt-3 flex items-center justify-end space-x-2 border-t border-slate-200">
+            <button 
+              type="button" 
+              @click="closeUploadModal" 
+              class="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800 rounded-lg"
+            >
+              {{ t('cancelBtn') }}
+            </button>
+            <button 
+              type="submit" 
+              :disabled="submitting || !form.image"
+              class="px-4 py-2 bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white text-xs font-medium rounded-lg shadow-sm transition-all"
+            >
+              <span>{{ t('submitBtn') }}</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- MODAL 2: CARD DETAILS VIEW -->
+    <div v-if="selectedPostcard" role="dialog" aria-modal="true" aria-labelledby="details-title" class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 transform transition-all">
+        <div class="relative bg-slate-900 aspect-[4/3] w-full">
+          <img :src="selectedPostcard.image" :alt="selectedPostcard.title" decoding="async" class="w-full h-full object-contain" />
+          <button 
+            :aria-label="t('closeBtn')"
+            @click="selectedPostcard = null" 
+            class="absolute top-3 right-3 bg-black/55 hover:bg-black/75 text-white p-1.5 rounded-full backdrop-blur-md transition-colors"
+          >
+            X
+          </button>
+        </div>
+
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-2">
+            <span 
+              class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded border"
+              :class="selectedPostcard.sourceType === 'Flower' ? 'bg-sky-50 text-sky-800 border-sky-200' : 'bg-slate-100 text-slate-800 border-slate-300'"
+            >
+              {{ selectedPostcard.sourceType === 'Flower' ? t('typeFlower') : t('typeMushroom') }}
+            </span>
+            <span class="text-xs text-slate-600">{{ selectedPostcard.date }}</span>
+          </div>
+
+          <h2 id="details-title" class="text-xl font-bold text-slate-900 mb-2">{{ selectedPostcard.title }}</h2>
+          
+          <div class="flex items-start text-xs text-slate-600 bg-slate-50 p-3 rounded-lg border border-slate-100 mb-4">
+            <span>{{ selectedPostcard.address }}</span>
+          </div>
+
+          <!-- Close Button -->
+          <div class="flex justify-end">
+            <button 
+              @click="selectedPostcard = null" 
+              class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors"
+            >
+              {{ t('closeBtn') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
