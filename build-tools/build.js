@@ -30,6 +30,6 @@ const css = read('src/out.css');
 
 // 4) HTML
 fs.writeFileSync(path.join(__dirname, 'dist/index.html'),
-  read('src/index.html').replace('/*CSS*/', () => css).replace('__HASH__', hash));
+  read('src/index.html').replace('/*CSS*/', () => css).split('__HASH__').join(hash));
 fs.copyFileSync(path.join(__dirname, 'src/_headers'), path.join(__dirname, 'dist/_headers'));
 console.log('built', { js: out.length, css: css.length, hash });

@@ -28,6 +28,7 @@ import { render } from './render.generated.js';
           date: new Date().toISOString().split('T')[0],
           image: '',
           thumb: '',
+          thumbSm: '',
           imageUrlInput: ''
         });
 
@@ -190,6 +191,7 @@ import { render } from './render.generated.js';
             date: new Date().toISOString().split('T')[0],
             image: '',
             thumb: '',
+          thumbSm: '',
             imageUrlInput: ''
           };
           imageInputType.value = 'file';
@@ -220,6 +222,7 @@ import { render } from './render.generated.js';
             img.onload = () => {
               form.value.image = resizeToWebp(img, 1200, 0.8);
               form.value.thumb = resizeToWebp(img, 480, 0.72);
+              form.value.thumbSm = resizeToWebp(img, 320, 0.7);
             };
             img.src = event.target.result;
           };
@@ -229,6 +232,7 @@ import { render } from './render.generated.js';
         const handleUrlInput = () => {
           form.value.image = form.value.imageUrlInput;
           form.value.thumb = '';
+          form.value.thumbSm = '';
         };
 
         const handleImageError = (e) => {
@@ -246,7 +250,8 @@ import { render } from './render.generated.js';
             address: form.value.address,
             date: form.value.date,
             image: form.value.image,
-            thumb: form.value.thumb || undefined
+            thumb: form.value.thumb || undefined,
+            thumbSm: form.value.thumbSm || undefined
           };
 
           try {
@@ -273,6 +278,10 @@ import { render } from './render.generated.js';
             submitting.value = false;
           }
         };
+
+        // Offer the browser two grid picture sizes; it downloads the one that fits the screen.
+        const thumbSrcset = (item) =>
+          item.thumb && item.thumbSm ? `${item.thumbSm} 320w, ${item.thumb} 480w` : undefined;
 
         const openDetailsModal = (item) => {
           selectedPostcard.value = item;
@@ -308,6 +317,7 @@ import { render } from './render.generated.js';
           submitPostcard,
           loadMorePostcards,
           openDetailsModal,
+thumbSrcset,
           fetchPostcards
         };
       }

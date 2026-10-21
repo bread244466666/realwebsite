@@ -11,6 +11,10 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Pikmin Bloom Postcard Gallery</title>
   <style>/*CSS*/</style>
+  <!-- Tell the browser about the two things the page needs, as early as possible, so they
+       download side by side instead of one waiting for the other. -->
+  <link rel="modulepreload" href="assets/app.__HASH__.js">
+  <link rel="preload" as="fetch" href="/api/postcards?limit=30&skip=0" crossorigin>
   <!-- Start the API request right away (in parallel with the JS download) and
        preload the first images as soon as their addresses are known. -->
   <script>
@@ -26,6 +30,11 @@
           if (!u) return;
           var l = document.createElement('link');
           l.rel = 'preload'; l.as = 'image'; l.href = u;
+          // same size choice the page makes (see sizes= on the card images in template.html)
+          if (c.thumb && c.thumbSm) {
+            l.imageSrcset = c.thumbSm + ' 320w, ' + c.thumb + ' 480w';
+            l.imageSizes = '(min-width: 1280px) 286px, (min-width: 1024px) calc((100vw - 136px) / 4), (min-width: 768px) calc((100vw - 96px) / 3), (min-width: 640px) calc((100vw - 72px) / 2), calc(100vw - 32px)';
+          }
           if (i === 0) l.fetchPriority = 'high';
           document.head.appendChild(l);
         });

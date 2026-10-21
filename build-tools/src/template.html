@@ -114,7 +114,9 @@
           <!-- Image Container -->
           <div class="relative aspect-[4/3] bg-slate-100 overflow-hidden border-b border-slate-100">
             <img 
-              :src="item.thumb || item.image" 
+              :src="item.thumb || item.image"
+              :srcset="thumbSrcset(item)"
+              sizes="(min-width: 1280px) 286px, (min-width: 1024px) calc((100vw - 136px) / 4), (min-width: 768px) calc((100vw - 96px) / 3), (min-width: 640px) calc((100vw - 72px) / 2), calc(100vw - 32px)" 
               :alt="item.title" 
               width="400" height="300"
               :loading="idx < 4 ? 'eager' : 'lazy'"
