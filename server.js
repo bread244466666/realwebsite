@@ -16,7 +16,13 @@ app.set('trust proxy', true);
 if (compression) app.use(compression());
 app.use(express.json({ limit: '15mb' }));
 
+// 🔒 修正：限制只有您自己的網域可以調用此 API
+app.use(cors({
+  origin: 'https://pikmin.tech'
+}));
+
 const PORT = process.env.PORT || 3000;
+
 const MONGODB_URI = process.env.MONGODB_URI;
 
 // Connect once (the original connected twice) and make sure the sort index exists.
