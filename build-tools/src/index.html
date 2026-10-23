@@ -39,7 +39,7 @@
           document.head.appendChild(l);
         });
       }).catch(function () {});
-      window.__pcPromise = p;
+      globalThis.__pcPromise = p;
     } catch (e) {}
   })();
   </script>

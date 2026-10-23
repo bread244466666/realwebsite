@@ -1,5 +1,5 @@
 
-    import { createApp, ref, computed, onMounted, onBeforeUnmount, watch } from 'vue';
+    import { createApp, ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
 import { render } from './render.generated.js';
 
     createApp({
@@ -21,6 +21,52 @@ import { render } from './render.generated.js';
         const selectedPostcard = ref(null);
 
         const imageInputType = ref('file');
+
+        // hCaptcha (the script is only downloaded when someone opens the Add Postcard window)
+        const HCAPTCHA_SITEKEY = '59187592-c888-410a-a9ee-f92a10ccea82';
+        const captchaToken = ref('');
+        const captchaError = ref(false);
+        let captchaWidget = null;
+        let captchaScript = null;
+
+        const loadCaptchaScript = () => {
+          captchaScript ??= new Promise((resolve, reject) => {
+            if (globalThis.hcaptcha) { resolve(); return; }
+            const s = document.createElement('script');
+            s.src = 'https://js.hcaptcha.com/1/api.js?render=explicit';
+            s.async = true;
+            s.addEventListener('load', () => resolve());
+            s.addEventListener('error', () => { captchaScript = null; reject(new Error('hCaptcha script blocked')); });
+            document.head.append(s);
+          });
+          return captchaScript;
+        };
+
+        const showCaptcha = async () => {
+          captchaToken.value = '';
+          captchaError.value = false;
+          captchaWidget = null;
+          if (!apiConnected.value) return;
+          try {
+            await Promise.all([loadCaptchaScript(), nextTick()]);
+            const box = document.getElementById('hcaptcha-box');
+            if (!box || !showUploadModal.value) return;
+            captchaWidget = globalThis.hcaptcha.render(box, {
+              sitekey: HCAPTCHA_SITEKEY,
+              callback: (token) => { captchaToken.value = token; captchaError.value = false; },
+              'expired-callback': () => { captchaToken.value = ''; },
+              'error-callback': () => { captchaToken.value = ''; captchaError.value = true; }
+            });
+          } catch (err) {
+            console.warn('Could not show the captcha.', err);
+            captchaError.value = true;
+          }
+        };
+
+        const resetCaptcha = () => {
+          captchaToken.value = '';
+          if (captchaWidget !== null && globalThis.hcaptcha) globalThis.hcaptcha.reset(captchaWidget);
+        };
         const form = ref({
           title: '',
           sourceType: 'Flower',
@@ -64,6 +110,7 @@ import { render } from './render.generated.js';
             formDateLabel: 'Obtained Date',
             cancelBtn: 'Cancel',
             submitBtn: 'Save Postcard',
+            captchaError: 'Please complete the "I am human" check.',
             closeBtn: 'Close',
             loadMoreBtn: 'Load More Postcards',
             loadingMoreText: 'Loading...',
@@ -100,6 +147,7 @@ import { render } from './render.generated.js';
             formDateLabel: '獲得日期',
             cancelBtn: '取消',
             submitBtn: '儲存明信片',
+            captchaError: '請先完成「我是人類」驗證。',
             closeBtn: '關閉',
             loadMoreBtn: '載入更多明信片',
             loadingMoreText: '載入中...',
@@ -129,10 +177,10 @@ import { render } from './render.generated.js';
           loading.value = true;
           try {
             let data = null;
-            if (window.__pcPromise) {
-              const early = window.__pcPromise;
-              window.__pcPromise = null;
-              try { data = await early; } catch (e) { data = null; }
+            if (globalThis.__pcPromise) {
+              const early = globalThis.__pcPromise;
+              globalThis.__pcPromise = null;
+              try { data = await early; } catch { data = null; /* the early request failed: ask again below */ }
             }
             if (!data) {
               const res = await fetch(`/api/postcards?limit=${pageSize}&skip=0`);
@@ -142,13 +190,14 @@ import { render } from './render.generated.js';
             postcards.value = data;
             hasMore.value = data.length === pageSize;
             apiConnected.value = true;
-          } catch (err) {
+          } catch (error) {
+            console.warn('Could not load postcards from the API; using the saved copy.', error);
             apiConnected.value = false;
             const local = localStorage.getItem('pb_postcards');
             if (local) {
               try {
                 postcards.value = JSON.parse(local);
-              } catch (e) {
+              } catch {
                 postcards.value = [];
               }
             } else {
@@ -196,6 +245,7 @@ import { render } from './render.generated.js';
           };
           imageInputType.value = 'file';
           showUploadModal.value = true;
+          void showCaptcha();
         };
 
         const closeUploadModal = () => {
@@ -217,15 +267,15 @@ import { render } from './render.generated.js';
           const file = e.target.files[0];
           if (!file) return;
           const reader = new FileReader();
-          reader.onload = (event) => {
+          reader.addEventListener('load', (event) => {
             const img = new Image();
-            img.onload = () => {
+            img.addEventListener('load', () => {
               form.value.image = resizeToWebp(img, 1200, 0.8);
               form.value.thumb = resizeToWebp(img, 480, 0.72);
               form.value.thumbSm = resizeToWebp(img, 320, 0.7);
-            };
+            });
             img.src = event.target.result;
-          };
+          });
           reader.readAsDataURL(file);
         };
 
@@ -235,12 +285,19 @@ import { render } from './render.generated.js';
           form.value.thumbSm = '';
         };
 
+        // A picture failed to load: show a placeholder instead. The srcset must be removed too,
+        // otherwise the browser picks the broken picture again and the error repeats forever.
         const handleImageError = (e) => {
-          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+          const img = e.target;
+          if (img.dataset.failed) return;
+          img.dataset.failed = '1';
+          img.removeAttribute('srcset');
+          img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
         };
 
         const submitPostcard = async () => {
           if (!form.value.title || !form.value.address || !form.value.image) return;
+          if (apiConnected.value && !captchaToken.value) { captchaError.value = true; return; }
 
           submitting.value = true;
 
@@ -251,7 +308,8 @@ import { render } from './render.generated.js';
             date: form.value.date,
             image: form.value.image,
             thumb: form.value.thumb || undefined,
-            thumbSm: form.value.thumbSm || undefined
+            thumbSm: form.value.thumbSm || undefined,
+            captchaToken: apiConnected.value ? captchaToken.value : undefined
           };
 
           try {
@@ -272,7 +330,9 @@ import { render } from './render.generated.js';
               localStorage.setItem('pb_postcards', JSON.stringify(postcards.value));
             }
             closeUploadModal();
-          } catch (err) {
+          } catch (error) {
+            console.error('Saving the postcard failed.', error);
+            resetCaptcha(); // a captcha answer works only once
             alert('儲存明信片失敗。');
           } finally {
             submitting.value = false;
@@ -288,10 +348,10 @@ import { render } from './render.generated.js';
         };
 
         onMounted(() => {
-          fetchPostcards();
-          window.addEventListener('keydown', onKey);
+          void fetchPostcards();
+          globalThis.addEventListener('keydown', onKey);
         });
-        onBeforeUnmount(() => window.removeEventListener('keydown', onKey));
+        onBeforeUnmount(() => globalThis.removeEventListener('keydown', onKey));
 
         return {
           currentLang,
@@ -308,6 +368,8 @@ import { render } from './render.generated.js';
           showUploadModal,
           selectedPostcard,
           imageInputType,
+          captchaToken,
+          captchaError,
           form,
           openUploadModal,
           closeUploadModal,

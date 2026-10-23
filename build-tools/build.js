@@ -1,7 +1,7 @@
 // Build: node build.js   (or: npm run build)
 // src/template.html + src/app.js + src/index.html  ->  dist/
-const fs = require('fs'), path = require('path'), crypto = require('crypto');
-const { execSync } = require('child_process');
+const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
+const { execFileSync } = require('node:child_process');
 const { compile } = require('@vue/compiler-dom');
 const esbuild = require('esbuild');
 
@@ -25,11 +25,11 @@ const hash = crypto.createHash('sha1').update(out).digest('hex').slice(0, 8);
 fs.writeFileSync(path.join(__dirname, `dist/assets/app.${hash}.js`), out);
 
 // 3) Tailwind CSS (only the classes actually used), minified, inlined into the page
-execSync('npx tailwindcss -c tailwind.config.js -i src/in.css -o src/out.css --minify', { cwd: __dirname, stdio: 'pipe' });
+execFileSync(process.execPath, [require.resolve('tailwindcss/lib/cli.js'), '-c', 'tailwind.config.js', '-i', 'src/in.css', '-o', 'src/out.css', '--minify'], { cwd: __dirname, stdio: 'pipe' });
 const css = read('src/out.css');
 
 // 4) HTML
 fs.writeFileSync(path.join(__dirname, 'dist/index.html'),
-  read('src/index.html').replace('/*CSS*/', () => css).split('__HASH__').join(hash));
+  read('src/index.html').replace('/*CSS*/', () => css).replaceAll('__HASH__', hash));
 fs.copyFileSync(path.join(__dirname, 'src/_headers'), path.join(__dirname, 'dist/_headers'));
 console.log('built', { js: out.length, css: css.length, hash });

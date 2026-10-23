@@ -1,0 +1,13 @@
+hCaptcha on "Add Postcard" - what to do
+=======================================
+1. Upload to GitHub (replace the old ones): index.html, server.js, remote-image.js, assets/app.dacd4d42.js
+   and (if present) _headers. DELETE the old file assets/app.39a64b7b.js (or app.fd8f339d.js).
+2. On your SERVER add your hCaptcha SECRET key (hCaptcha dashboard -> Settings -> Secret Key).
+   Never put the secret in GitHub or in index.html. Either add this line to the server's .env file:
+       HCAPTCHA_SECRET=0x....your secret....
+   or add it as an Environment Variable in your hosting panel. Then restart the server.
+3. Server packages (once):  npm i sharp compression
+4. Check: open the site, click Add Postcard, a checkbox appears; solving it enables "Save Postcard".
+   Until HCAPTCHA_SECRET is set the server refuses new postcards (message: "Captcha is not configured").
+If your site sends a Content-Security-Policy, allow https://hcaptcha.com and https://*.hcaptcha.com
+in script-src, frame-src, style-src and connect-src.
