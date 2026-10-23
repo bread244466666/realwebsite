@@ -15,7 +15,6 @@ const app = express();
 app.set('trust proxy', true);
 if (compression) app.use(compression());
 app.use(express.json({ limit: '15mb' }));
-app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
